@@ -1,3 +1,54 @@
 {
-  'name': 'framework'
+    "name": "jaguarjack/xhyadmin",
+    "description": "the api framework base on thinkphp, help you to create admin management soon",
+    "type": "project",
+    "keywords": [
+        "framework",
+        "xhyadmin",
+        "api",
+        "ORM"
+    ],
+    "homepage": "http://doc.catchadmin.com",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "jaguarjack",
+            "email": "njphper@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "topthink/framework": "^6.0.0",
+        "topthink/think-orm": "^2.0",
+        "topthink/think-migration": "^3.0",
+        "thans/tp-jwt-auth": "^1.0",
+        "workerman/workerman": "^3.5",
+        "jaguarjack/think-filesystem-cloud": "dev-master",
+        "overtrue/wechat": "^4.2",
+         "ext-json": "*",
+        "jaguarjack/migration-generator": "dev-master"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.2",
+        "topthink/think-trace":"^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app",
+            "xhyadmin\\": "xhy",
+            "JaguarJack\\Generator\\": "package/thinkphp-generator/src"
+        },
+        "psr-0": {
+            "": "extend/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php think service:discover",
+            "@php think vendor:publish"
+        ]
+    }
 }
