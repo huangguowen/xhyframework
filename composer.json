@@ -9,7 +9,6 @@
             "email": "1194729753@qq.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
     	"php": ">=7.0.0"
     },
