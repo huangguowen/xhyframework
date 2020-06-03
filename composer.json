@@ -9,13 +9,13 @@
             "email": "1194729753@qq.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
-    	"php": ">=7.0.0",
-    	"huangguowen/xhyframework": "dev-master"
+    	"php": ">=7.0.0"
     },
     "autoload": {
         "psr-4": {
-            "huangguowen\\xhyframework\\": "src/"
+            "xhyadminframework\\": "app"
         }
     }
 }
