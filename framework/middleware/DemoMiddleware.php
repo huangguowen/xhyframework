@@ -1,5 +1,5 @@
 <?php
-namespace xhyadmin\framework\middleware;
+namespace xhyadminframework\middleware;
 
 use think\Middleware;
 

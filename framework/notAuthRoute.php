@@ -1,2 +1,2 @@
 <?php
-$router->post('login', '\xhyadmin\framework\controller\Common@login');
+$router->post('login', '\xhyadminframework\controller\Common@login');

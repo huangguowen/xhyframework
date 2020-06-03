@@ -16,7 +16,7 @@ use think\Request as Request;
 use catcher\base\CatchController;
 use catcher\CatchResponse;
 use catcher\Tree;
-use xhyadmin\framework\model\Menu as MenuModel;
+use xhyadminframework\model\Menu as MenuModel;
 use catcher\Utils;
 use think\facade\Db;
 use think\response\Json;

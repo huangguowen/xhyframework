@@ -3,7 +3,7 @@
 /**
  * 字典分类管理
  */
-namespace xhyadmin\framework\controller;
+namespace xhyadminframework\controller;
 
 use catcher\base\CatchRequest;
 use catcher\base\CatchController;

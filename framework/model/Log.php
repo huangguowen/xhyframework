@@ -1,6 +1,6 @@
 <?php
 
-namespace xhyadmin\framework\model;
+namespace xhyadminframework\model;
 use think\facade\Db;
 
 class Log extends \think\Model

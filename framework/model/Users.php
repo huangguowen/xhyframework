@@ -6,7 +6,7 @@ user:黄国文
 date:
 */
 
-namespace xhyadmin\framework\model;
+namespace xhyadminframework\model;
 
 use catcher\base\CatchModel;
 use think\facade\Db;

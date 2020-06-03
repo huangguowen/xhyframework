@@ -1,6 +1,6 @@
 <?php
 
-namespace xhyadmin\framework\event;
+namespace xhyadminframework\event;
 
 class DemoEvent
 {

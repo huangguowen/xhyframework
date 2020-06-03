@@ -1,5 +1,5 @@
 <?php
-namespace xhyadmin\framework\request;
+namespace xhyadminframework\request;
 
 use catcher\base\CatchRequest;
 

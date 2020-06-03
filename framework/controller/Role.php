@@ -7,7 +7,7 @@
  * note:
  */
 
-namespace xhyadmin\framework\controller;
+namespace xhyadminframework\controller;
 
 use catcher\base\CatchController;
 use catcher\base\CatchRequest;
@@ -16,7 +16,7 @@ use catcher\Tree;
 use think\response\Json;
 use think\facade\Db;
 use catcher\Utils;
-use xhyadmin\framework\model\Menu as MenuModel;
+use xhyadminframework\model\Menu as MenuModel;
 
 class role extends CatchController
 {

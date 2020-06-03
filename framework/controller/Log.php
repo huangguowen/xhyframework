@@ -4,12 +4,12 @@
  * date:2020-05-013
  * user:yjj
  */
-namespace xhyadmin\framework\controller;
+namespace xhyadminframework\controller;
 
 use catcher\base\CatchController;
 use catcher\base\CatchRequest;
 use catcher\Tree;
-use xhyadmin\framework\model\Log as LogModel;
+use xhyadminframework\model\Log as LogModel;
 use catcher\Utils;
 use think\facade\Db;
 

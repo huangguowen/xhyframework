@@ -6,7 +6,7 @@
  *
  */
 
-namespace xhyadmin\framework\controller;
+namespace xhyadminframework\controller;
 
 use app\Request;
 use catcher\base\CatchController;

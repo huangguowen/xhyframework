@@ -1,9 +1,9 @@
 <?php
 
-namespace xhyadmin\framework\middleware;
+namespace xhyadminframework\middleware;
 
 use app\Request;
-use xhyadmin\framework\model\Menu;
+use xhyadminframework\model\Menu;
 use catcher\CatchCacheKeys;
 use catcher\Code;
 use catcher\exceptions\PermissionForbiddenException;

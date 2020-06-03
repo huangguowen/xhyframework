@@ -8,13 +8,13 @@
  * asdfasdfasdfasdf
  */
 
-namespace xhyadmin\framework\controller;
+namespace xhyadminframework\controller;
 
 use catcher\Utils;
 use think\facade\Db;
 use app\Request;
-use xhyadmin\framework\request\LoginRequest;
-use xhyadmin\framework\model\Users;
+use xhyadminframework\request\LoginRequest;
+use xhyadminframework\model\Users;
 use catcher\base\CatchController;
 use catcher\CatchAuth;
 use catcher\CatchCacheKeys;

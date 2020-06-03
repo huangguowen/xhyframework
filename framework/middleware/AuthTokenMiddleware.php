@@ -1,5 +1,5 @@
 <?php
-namespace xhyadmin\framework\middleware;
+namespace xhyadminframework\middleware;
 
 use catcher\Code;
 use catcher\exceptions\FailedException;
