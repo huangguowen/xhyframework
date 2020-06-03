@@ -6,7 +6,7 @@
  * user:yjj
  */
 
-namespace xhyadmin\framework\controller;
+namespace xhyadminframework\controller;
 
 
 use catcher\base\CatchRequest;
