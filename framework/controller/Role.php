@@ -29,7 +29,7 @@ class role extends XhyController
      * @return \think\response\Json
      * @throws \think\db\exception\DbException
      */
-    public function index(XhyRequest $XhyRequest)
+    public function index(XhyRequest $request)
     {
 
         //region 准备参数（验证参数/定义变量/排序字段）

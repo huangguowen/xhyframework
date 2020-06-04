@@ -10,7 +10,7 @@ namespace xhyadminframework\controller;
 
 use app\Request;
 use xhyadminframework\base\XhyController;
-use catcher\CatchAuth;
+use base\CatchAuth;
 use xhyadminframework\XhyResponse;
 use xhyadminframework\Tree;
 use xhyadminframework\Utils;

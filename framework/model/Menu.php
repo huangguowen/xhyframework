@@ -2,9 +2,9 @@
 
 namespace xhyadminframework\model;
 
-use catcher\base\CatchModel;
+use xhyadminframework\base\XhyModel;
 use think\facade\Db;
-use catcher\CatchAuth;
+use base\CatchAuth;
 use think\Model;
 
 class Menu extends CatchModel

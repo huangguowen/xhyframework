@@ -4,9 +4,9 @@ namespace xhyadminframework\middleware;
 
 use app\Request;
 use xhyadminframework\model\Menu;
-use catcher\CatchCacheKeys;
-use catcher\Code;
-use catcher\exceptions\PermissionForbiddenException;
+use xhyadminframework\CatchCacheKeys;
+use xhyadminframework\Code;
+use xhyadminframework\exceptions\PermissionForbiddenException;
 use think\facade\Cache;
 use think\helper\Str;
 

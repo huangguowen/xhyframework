@@ -1,5 +1,5 @@
 <?php
-namespace catcher\base;
+namespace xhyadminframework\base;
 
 use think\Validate;
 

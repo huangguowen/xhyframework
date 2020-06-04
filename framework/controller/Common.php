@@ -16,7 +16,7 @@ use app\Request;
 use xhyadminframework\request\LoginRequest;
 use xhyadminframework\model\Users;
 use xhyadminframework\base\XhyController;
-use catcher\CatchAuth;
+use base\CatchAuth;
 use xhyadminframework\XhyCacheKeys;
 use xhyadminframework\XhyResponse;
 use xhyadminframework\exceptions\LoginFailedException;

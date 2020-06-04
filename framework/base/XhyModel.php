@@ -6,7 +6,7 @@ use think\model\concern\SoftDelete;
 /**
  *
  * Class CatchModel
- * @package catcher\base
+ * @package xhyadminframework\base
  */
 abstract class XhyModel extends \think\Model
 {
