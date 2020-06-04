@@ -9,22 +9,21 @@
 
 namespace xhyadminframework\controller;
 
-use catcher\base\CatchController;
-use catcher\base\CatchRequest;
-use catcher\Utils;
+use xhyadminframework\base\XhyController;
+use xhyadminframework\Utils;
 use think\facade\Db;
 
-class unit extends CatchController
+class unit extends XhyController
 {
     protected $unit_role_id = 'CCA511AC2C9B54D2858909E299818FD3';
     /**
      * 获取单位列表
      * @time 2020年01月09日
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return \think\response\Json
      * @throws \think\db\exception\DbException
      */
-    public function index(CatchRequest $request)
+    public function index(XhyRequest $request)
     {
 
         //region 准备参数（验证参数/定义变量/排序字段）
@@ -106,7 +105,7 @@ class unit extends CatchController
     /**
      * 获取单位记录
      * @time 2020年01月09日
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return \think\response\Json
      * @throws \think\db\exception\DbException
      */
@@ -122,10 +121,10 @@ class unit extends CatchController
      * 保存
      *
      * @time 2020年01月09日
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return \think\response\Json
      */
-    public function save(CatchRequest $request): \think\response\Json
+    public function save(XhyRequest $request): \think\response\Json
     {
         return $this->onSaveData($request);
     }
@@ -135,10 +134,10 @@ class unit extends CatchController
      *
      * @time 2020年01月09日
      * @param $id
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return \think\response\Json
      */
-    public function update($id, CatchRequest $request): \think\response\Json
+    public function update($id, XhyRequest $request): \think\response\Json
     {
         return $this->onSaveData($request, $id);
     }
@@ -146,7 +145,7 @@ class unit extends CatchController
     /**
      * 添加/修改数据
      */
-    private function onSaveData(CatchRequest $request, $id = ""): \think\response\Json
+    private function onSaveData(XhyRequest $request, $id = ""): \think\response\Json
     {
         //region 准备参数 (定义变量/获取参数/验证参数)
         //--------------------------------------------------

@@ -6,23 +6,23 @@
  */
 namespace xhyadminframework\controller;
 
-use catcher\base\CatchController;
-use catcher\base\CatchRequest;
-use catcher\Tree;
+use xhyadminframework\base\XhyController;
+use xhyadminframework\base\XhyRequest;
+use xhyadminframework\Tree;
 use xhyadminframework\model\Log as LogModel;
-use catcher\Utils;
+use xhyadminframework\Utils;
 use think\facade\Db;
 
-class Log extends CatchController
+class Log extends XhyController
 {
     /**
      * 日志列表
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @param LogModel $log
      * @return \think\response\Json
      * @throws \think\db\exception\DbException
      */
-    public function index(CatchRequest $catchRequest,LogModel $log)
+    public function index(XhyRequest $XhyRequest,LogModel $log)
     {
         //@验证规则
         $rule =   [
@@ -36,14 +36,14 @@ class Log extends CatchController
             return $this->fail($paramError);
         }
         //分页参数
-        $pageIndex = $catchRequest->param("page");           //当前页码
-        $pageSize = $catchRequest->param("limit");           //每页大小
-        $orderbyField = $catchRequest->param("sortField");   //排序字段
-        $orderbyDir = $catchRequest->param("sortOrder");     //排序方向
+        $pageIndex = $XhyRequest->param("page");           //当前页码
+        $pageSize = $XhyRequest->param("limit");           //每页大小
+        $orderbyField = $XhyRequest->param("sortField");   //排序字段
+        $orderbyDir = $XhyRequest->param("sortOrder");     //排序方向
         $defaultOrderbyField = 'log_datetime desc';
 
-        $start_time = $catchRequest->param('start_time');
-        $end_time = $catchRequest->param('end_time');
+        $start_time = $XhyRequest->param('start_time');
+        $end_time = $XhyRequest->param('end_time');
         if($start_time){
             $start_time = substr($start_time,1,10)." 00-00-00";
         }
@@ -53,12 +53,12 @@ class Log extends CatchController
 
         //@拼接查询条件
         $where = "";
-        $where .= Utils::getString("and category_identity like '%{0}%'", $catchRequest->param('category_identity'));
-        $where .= Utils::getString("and log_type like '%{0}%'", $catchRequest->param('log_type'));
+        $where .= Utils::getString("and category_identity like '%{0}%'", $XhyRequest->param('category_identity'));
+        $where .= Utils::getString("and log_type like '%{0}%'", $XhyRequest->param('log_type'));
         $where .= Utils::getString("and log_datetime >= '{0}'", $start_time);
         $where .= Utils::getString("and log_datetime <= '{0}'", $end_time);
-        $where .= Utils::getString("and user_name like '%{0}%'", $catchRequest->param('user_name'));
-        $where .= Utils::getString("and log_title like '%{0}%'", $catchRequest->param('log_title'));
+        $where .= Utils::getString("and user_name like '%{0}%'", $XhyRequest->param('user_name'));
+        $where .= Utils::getString("and log_title like '%{0}%'", $XhyRequest->param('log_title'));
 
 
         //echo $where;exit;

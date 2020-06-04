@@ -9,24 +9,24 @@
 namespace xhyadminframework\controller;
 
 
-use catcher\base\CatchRequest;
+use xhyadminframework\base\XhyRequest;
 
 use think\Request as Request;
 
-use catcher\base\CatchController;
-use catcher\CatchResponse;
-use catcher\Tree;
+use xhyadminframework\base\XhyController;
+use xhyadminframework\XhyResponse;
+use xhyadminframework\Tree;
 use xhyadminframework\model\Menu as MenuModel;
-use catcher\Utils;
+use xhyadminframework\Utils;
 use think\facade\Db;
 use think\response\Json;
 
-class Menu extends CatchController
+class Menu extends XhyController
 {
     /**
      * 获取树列表
      * 查询时需要显示父节点
-     * @param CatchRequest $request
+     * @param XhyRequest $XhyRequest
      * @return Json
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -55,29 +55,29 @@ class Menu extends CatchController
         $menuList = $menuModel->roleGetList();
         $treeList = Tree::done($menuList, "0", 'parent_id', 'children', 'id');
         $treeList = Tree::resetTree($treeList);
-        return CatchResponse::success($treeList);
+        return XhyResponse::success($treeList);
     }
 
     /**
      * 添加菜单
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      */
-    public function save(CatchRequest $catchRequest): Json
+    public function save(XhyRequest $XhyRequest): Json
     {
-        return $this->onSaveData($catchRequest);
+        return $this->onSaveData($XhyRequest);
 
     }
 
     /**
      * 更新菜单
      * @param $id
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      */
-    public function update($id, CatchRequest $catchRequest): Json
+    public function update($id, XhyRequest $XhyRequest): Json
     {
-        return $this->onSaveData($catchRequest, $id);
+        return $this->onSaveData($XhyRequest, $id);
 
     }
 
@@ -148,14 +148,14 @@ class Menu extends CatchController
 
     /**
      * 菜单向上向下排序
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
 
-    public function sort(CatchRequest $catchRequest)
+    public function sort(XhyRequest $XhyRequest)
     {
         $rule = [
             'id' => 'require',
@@ -167,8 +167,8 @@ class Menu extends CatchController
             return $this->fail($paramError);
         }
         try {
-            $menuId = $catchRequest->param('id');
-            $action = $catchRequest->param('action');
+            $menuId = $XhyRequest->param('id');
+            $action = $XhyRequest->param('action');
             $menuModel = new MenuModel();
             $menuInfo = $menuModel->where('menu_id', $menuId)->find();
             if (!$menuInfo) {
@@ -188,20 +188,20 @@ class Menu extends CatchController
     /**
      * 菜单操作列表
      * @param $id
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
 
-    public function functionList(CatchRequest $catchRequest)
+    public function functionList(XhyRequest $XhyRequest)
     {
         $menuModel = new MenuModel();
         //分页参数
-        $pageIndex = $catchRequest->param("page") ?: 1;           //当前页码
-        $pageSize = $catchRequest->param("limit") ?: 10;           //每页大小
-        $id = $catchRequest->param("id") ?: 10;           //每页大小
+        $pageIndex = $XhyRequest->param("page") ?: 1;           //当前页码
+        $pageSize = $XhyRequest->param("limit") ?: 10;           //每页大小
+        $id = $XhyRequest->param("id") ?: 10;           //每页大小
 
 
         // 判断menu是否存在
@@ -238,9 +238,9 @@ class Menu extends CatchController
      * @return Json
      */
 
-    public function functionAdd(CatchRequest $catchRequest)
+    public function functionAdd(XhyRequest $XhyRequest)
     {
-        return $this->onFunctionSaveData($catchRequest);
+        return $this->onFunctionSaveData($XhyRequest);
     }
 
     /**
@@ -297,19 +297,19 @@ class Menu extends CatchController
      * @return Json
      */
 
-    public function functionUpdate($id, CatchRequest $catchRequest)
+    public function functionUpdate($id, XhyRequest $XhyRequest)
     {
-        return $this->onFunctionSaveData($catchRequest, $id);
+        return $this->onFunctionSaveData($XhyRequest, $id);
     }
 
     /**
      * 移动节点
      * 需要更新树节点
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      */
 
-    public function sortExchange(CatchRequest $catchRequest)
+    public function sortExchange(XhyRequest $XhyRequest)
     {
 
         $isSuccess = false;
@@ -326,9 +326,9 @@ class Menu extends CatchController
         $menuModel = new MenuModel();
         Db::startTrans();
         try {
-            $dropId = $catchRequest->param('dropId');
-            $dragId = $catchRequest->param('dragId');
-            $to = $catchRequest->param('to');
+            $dropId = $XhyRequest->param('dropId');
+            $dragId = $XhyRequest->param('dragId');
+            $to = $XhyRequest->param('to');
             // 00 代表是虚拟主菜单
             if ($dropId != '00') {
                 // 判断两条数据是否存在
@@ -427,11 +427,11 @@ class Menu extends CatchController
 
     /**
      * 添加编辑菜单
-     * @param CatchRequest $request
+     * @param XhyRequest $XhyRequest
      * @param string $id
      * @return Json
      */
-    private function onSaveData(CatchRequest $request, $id = '')
+    private function onSaveData(XhyRequest $XhyRequest, $id = '')
     {
         $param = $request->param();
         $rule = [
@@ -508,11 +508,11 @@ class Menu extends CatchController
 
     /**
      * 添加/编辑 操作按钮
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @param string $id
      * @return Json
      */
-    private function onFunctionSaveData(CatchRequest $catchRequest, $id = '')
+    private function onFunctionSaveData(XhyRequest $XhyRequest, $id = '')
     {
         $rule = [
             'function_name' => 'require'
@@ -523,7 +523,7 @@ class Menu extends CatchController
             return $this->fail($paramError);
         }
         $isSuccess = false;
-        $param = $catchRequest->param();
+        $param = $XhyRequest->param();
 
         $logModel = new MenuModel();
         //判断添加或修改

@@ -1,10 +1,10 @@
 <?php
-namespace xhyadmin\index\controller;
+namespace xhyadminframework\controller;
 
-use catcher\base\CatchController;
+use xhyadminframework\base\XhyController;
 use think\facade\Db;
 
-class Index extends CatchController
+class Index extends XhyController
 {
     /**
      *

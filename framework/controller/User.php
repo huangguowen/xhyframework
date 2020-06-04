@@ -9,14 +9,14 @@
 namespace xhyadminframework\controller;
 
 use app\Request;
-use catcher\base\CatchController;
+use xhyadminframework\base\XhyController;
 use catcher\CatchAuth;
-use catcher\CatchResponse;
-use catcher\Tree;
-use catcher\Utils;
+use xhyadminframework\XhyResponse;
+use xhyadminframework\Tree;
+use xhyadminframework\Utils;
 use think\facade\Db;
 
-class User extends CatchController
+class User extends XhyController
 {
 
     /**
@@ -143,7 +143,7 @@ class User extends CatchController
             //查询是否有该账号了
             $user = Db::table("s_user")->where('login_name', $request->param()['login_name'])->find();
             if (!empty($user)) {
-                return CatchResponse::fail("账户已存在，请重新输入");
+                return XhyResponse::fail("账户已存在，请重新输入");
             }
             //增加
             Db::startTrans();
@@ -179,10 +179,10 @@ class User extends CatchController
             $isSuccess = true;
 
             Db::commit();
-            return CatchResponse::success('', '添加成功');
+            return XhyResponse::success('', '添加成功');
         } catch (Exception $e) {
             Db::rollback();
-            return CatchResponse::fail("操作失败");
+            return XhyResponse::fail("操作失败");
         } finally {
 
             //region 结束
@@ -203,7 +203,7 @@ class User extends CatchController
     {
         $user = $auth->user();
         $user->roles = $this->user->getRole($id);
-        return CatchResponse::success($user);
+        return XhyResponse::success($user);
     }
 
     /**
@@ -265,7 +265,7 @@ class User extends CatchController
             $this->logInfo($logTitle, '');
 
             Db::commit();
-            return CatchResponse::success();
+            return XhyResponse::success();
         } catch (\Exception $e) {
 
             //region 异常 (回滚事务/记录日志/返回错误)
@@ -369,7 +369,7 @@ class User extends CatchController
             }
         }
 
-        return CatchResponse::success([], '操作成功');
+        return XhyResponse::success([], '操作成功');
     }
 
     /**
@@ -391,7 +391,7 @@ class User extends CatchController
             }
         }
 
-        return CatchResponse::success([
+        return XhyResponse::success([
             'roles' => $roles,
             'hasRoles' => $roleIds,
         ]);
@@ -434,7 +434,7 @@ class User extends CatchController
             $this->logInfo($logTitle, '');
 
             Db::commit();
-            return CatchResponse::success();
+            return XhyResponse::success();
         } catch (\Exception $e) {
 
             //region 异常 (回滚事务/记录日志/返回错误)
@@ -505,7 +505,7 @@ class User extends CatchController
             $this->logInfo($logTitle, '');
 
             Db::commit();
-            return CatchResponse::success();
+            return XhyResponse::success();
         } catch (\Exception $e) {
 
             //region 异常 (回滚事务/记录日志/返回错误)
@@ -553,7 +553,7 @@ class User extends CatchController
             }
             $logTitle = "修改id{$this->userID}";
             $this->logInfo($logTitle, '');
-            return CatchResponse::success();
+            return XhyResponse::success();
         } catch (\Exception $e) {
             //region 异常 (回滚事务/记录日志/返回错误)
             $this->logError("修改密码出错", $e);
@@ -578,6 +578,6 @@ class User extends CatchController
         if (!$user) {
             return $this->fail("用户查询失败");
         }
-        return CatchResponse::success($user);
+        return XhyResponse::success($user);
     }
 }

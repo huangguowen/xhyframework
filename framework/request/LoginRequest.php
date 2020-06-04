@@ -1,9 +1,9 @@
 <?php
 namespace xhyadminframework\request;
 
-use catcher\base\CatchRequest;
+use xhyadminframework\base\XhyRequest;
 
-class LoginRequest extends CatchRequest
+class LoginRequest extends XhyRequest
 {
     protected $needCreatorId = false;
 

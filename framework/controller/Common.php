@@ -1,7 +1,7 @@
 <?php
 
 /**
- * name:学生管理
+ * name:核心控制器
  * date:2020-05-01
  * user:linxr
  * note:xxxxx
@@ -10,19 +10,19 @@
 
 namespace xhyadminframework\controller;
 
-use catcher\Utils;
+use xhyadminframework\Utils;
 use think\facade\Db;
 use app\Request;
 use xhyadminframework\request\LoginRequest;
 use xhyadminframework\model\Users;
-use catcher\base\CatchController;
+use xhyadminframework\base\XhyController;
 use catcher\CatchAuth;
-use catcher\CatchCacheKeys;
-use catcher\CatchResponse;
-use catcher\exceptions\LoginFailedException;
+use xhyadminframework\XhyCacheKeys;
+use xhyadminframework\XhyResponse;
+use xhyadminframework\exceptions\LoginFailedException;
 use think\facade\Cache;
 
-class Common extends CatchController
+class Common extends XhyController
 {
      /**
    * 登陆
@@ -46,16 +46,16 @@ class Common extends CatchController
       $roles = Db::table('s_user_in_role')->where('user_id', $user->user_id)->select()->toArray();
       //还未分配角色
       if (empty($roles)) {
-          return CatchResponse::fail('请向管理员分配此账号角色');
+          return XhyResponse::fail('请向管理员分配此账号角色');
       }
       $title = $user->login_name.'已经登录';
       $logDetail ='';
       // 2020-5-27 日志修改  yjj
       Utils::writeLog("info", $this->Request, $user->user_id, $user->user_name, $title, $logDetail);
 
-      return $token ? CatchResponse::success([
+      return $token ? XhyResponse::success([
           'token' => $token,
-      ], '登录成功') : CatchResponse::success('', '登录失败');
+      ], '登录成功') : XhyResponse::success('', '登录失败');
   }
 
 /**
@@ -71,11 +71,11 @@ class Common extends CatchController
       $title = $user->login_name.'已经登出';
       $this->logInfo($title, '');
       if ($auth->logout()) {
-          Cache::delete(CatchCacheKeys::USER_PERMISSIONS . $user->user_id);
-          return CatchResponse::success();
+          Cache::delete(XhyCacheKeys::USER_PERMISSIONS . $user->user_id);
+          return XhyResponse::success();
       }
 
-      return CatchResponse::fail('登出失败');
+      return XhyResponse::fail('登出失败');
   }
 
 
@@ -140,7 +140,7 @@ class Common extends CatchController
         $user->roles = $roles;
 
         // 缓存用户权限
-        Cache::set(CatchCacheKeys::USER_PERMISSIONS . $user->user_id, array_column($permissions, 'id'));
-        return CatchResponse::success($user);
+        Cache::set(XhyCacheKeys::USER_PERMISSIONS . $user->user_id, array_column($permissions, 'id'));
+        return XhyResponse::success($user);
     }
 }

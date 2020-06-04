@@ -8,10 +8,10 @@ date:
 
 namespace xhyadminframework\model;
 
-use catcher\base\CatchModel;
 use think\facade\Db;
+use xhyadminframework\base\XhyModel;
 
-class Users extends CatchModel
+class Users extends XhyModel
 {
 
     protected $name = 's_user';

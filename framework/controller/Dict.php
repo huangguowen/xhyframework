@@ -5,14 +5,14 @@
  */
 namespace xhyadminframework\controller;
 
-use catcher\base\CatchRequest;
-use catcher\base\CatchController;
-use catcher\Tree;
-use catcher\Utils;
+use xhyadminframework\base\XhyController;
+use xhyadminframework\base\XhyRequest;
+use xhyadminframework\Tree;
+use xhyadminframework\Utils;
 use think\facade\Db;
 use think\response\Json;
 
-class Dict extends CatchController
+class Dict extends XhyController
 {
     /**
      * 字典分类列表
@@ -23,7 +23,7 @@ class Dict extends CatchController
      * @author: lampzww
      * @Date: 15:14  2020/5/27
      */
-    public function index(CatchRequest $request): Json
+    public function index(XhyRequest $request): Json
     {
         $type   =   $request->param('type','','trim');
         $data   =   Db::name('s_dict_category')
@@ -48,12 +48,12 @@ class Dict extends CatchController
 
     /**
      * 字典列表
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return Json
      * @author: lampzww
      * @Date: 11:10  2020/5/28
      */
-    public function dictList(CatchRequest $request)
+    public function dictList(XhyRequest $request)
     {
         //region 准备参数（验证参数/定义变量/排序字段）
         //--------------------------------------------------------------------
@@ -135,27 +135,27 @@ class Dict extends CatchController
 
     /**
      * 添加、修改
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      * @author: lampzww
      * @Date: 15:15  2020/5/27
      */
-    public function save(CatchRequest $catchRequest): Json
+    public function save(XhyRequest $XhyRequest): Json
     {
-        return $this->onSaveData($catchRequest);
+        return $this->onSaveData($XhyRequest);
     }
 
     /**
      * 更新菜单
      * @param $id
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      * @author: lampzww
      * @Date: 15:15  2020/5/27
      */
-    public function update($id, CatchRequest $catchRequest): Json
+    public function update($id, XhyRequest $XhyRequest): Json
     {
-        return $this->onSaveData($catchRequest, $id);
+        return $this->onSaveData($XhyRequest, $id);
     }
 
     /**
@@ -219,12 +219,12 @@ class Dict extends CatchController
 
     /**
      * 向上向下排序
-     * @param CatchRequest $catchRequest
+     * @param XhyRequest $XhyRequest
      * @return Json
      * @author: lampzww
      * @Date: 15:16  2020/5/27
      */
-    public function sort(CatchRequest $catchRequest)
+    public function sort(XhyRequest $XhyRequest)
     {
         $rule = [
             'id' => 'require',
@@ -236,8 +236,8 @@ class Dict extends CatchController
         $paramError = $this->checkParams($rule, $msg);
         if ($paramError != "") return $this->fail($paramError);
         try {
-            $id = $catchRequest->param('id');
-            $action = $catchRequest->param('action');
+            $id = $XhyRequest->param('id');
+            $action = $XhyRequest->param('action');
             $info = Db::table('s_dict_category')->where('dict_category_id', $id)->find();
             if (!$info)return $this->fail('分类不存在');
             $op = $action == 'up' ? '<' : '>';
@@ -343,13 +343,13 @@ class Dict extends CatchController
 
     /**
      * 添加编辑分类
-     * @param CatchRequest $request
+     * @param XhyRequest $XhyRequest
      * @param string $id
      * @return Json
      * @author: lampzww
      * @Date: 15:17  2020/5/27
      */
-    private function onSaveData(CatchRequest $request, $id = '')
+    private function onSaveData(XhyRequest $XhyRequest, $id = '')
     {
         $param = $request->param();
 

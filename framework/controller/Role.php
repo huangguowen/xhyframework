@@ -9,27 +9,27 @@
 
 namespace xhyadminframework\controller;
 
-use catcher\base\CatchController;
-use catcher\base\CatchRequest;
-use catcher\CatchResponse;
-use catcher\Tree;
+use xhyadminframework\base\XhyController;
+use xhyadminframework\base\XhyRequest;
+use xhyadminframework\XhyResponse;
+use xhyadminframework\Tree;
 use think\response\Json;
 use think\facade\Db;
-use catcher\Utils;
+use xhyadminframework\Utils;
 use xhyadminframework\model\Menu as MenuModel;
 
-class role extends CatchController
+class role extends XhyController
 {
 
     const DEFAULTMENUID = 'afef82e722794634a3eba727b616a3c2';
     /**
      * 获取角色列表
      * @time 2020年01月09日
-     * @param CatchRequest $request
+     * @param XhyRequest $XhyRequest
      * @return \think\response\Json
      * @throws \think\db\exception\DbException
      */
-    public function index(CatchRequest $request)
+    public function index(XhyRequest $XhyRequest)
     {
 
         //region 准备参数（验证参数/定义变量/排序字段）
@@ -105,7 +105,7 @@ class role extends CatchController
     /**
      * 获取角色记录
      * @time 2020年01月09日
-     * @param CatchRequest $request
+     * @param XhyRequest $XhyRequest
      * @return \think\response\Json
      * @throws \think\db\exception\DbException
      */
@@ -119,10 +119,10 @@ class role extends CatchController
      * 保存
      *
      * @time 2020年01月09日
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return \think\response\Json
      */
-    public function save(CatchRequest $request): \think\response\Json
+    public function save(XhyRequest $request): \think\response\Json
     {
         return $this->onSaveData($request);
     }
@@ -133,10 +133,10 @@ class role extends CatchController
      *
      * @time 2020年01月09日
      * @param $id
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return \think\response\Json
      */
-    public function update($id, CatchRequest $request): \think\response\Json
+    public function update($id, XhyRequest $request): \think\response\Json
     {
         return $this->onSaveData($request, $id);
     }
@@ -144,7 +144,7 @@ class role extends CatchController
     /**
      * 添加/修改数据
      */
-    private function onSaveData(CatchRequest $request, $id = ""): \think\response\Json
+    private function onSaveData(XhyRequest $request, $id = ""): \think\response\Json
     {
         //region 准备参数 (定义变量/获取参数/验证参数)
         //--------------------------------------------------
@@ -353,7 +353,7 @@ class role extends CatchController
         $menuList = $permissions->roleGetList();
         $treeList = Tree::done($menuList, "0", 'parent_id', 'children', 'id');
         $treeList = Tree::resetTree($treeList);
-        return CatchResponse::success($treeList);
+        return XhyResponse::success($treeList);
     }
 
 
@@ -361,7 +361,7 @@ class role extends CatchController
     /**
      * 获取该角色已分配的菜单数据
      * @time 2020年01月09日
-     * @param CatchRequest $request
+     * @param XhyRequest $request
      * @return \think\response\Json
      * @throws \think\db\exception\DbException
      */
@@ -375,7 +375,7 @@ class role extends CatchController
             ->union("SELECT menu_function_id as menu_id FROM s_role_function_permission where role_id = '$id'")
             ->select()
             ->toArray();
-        return CatchResponse::success($data);
+        return XhyResponse::success($data);
     }
 
 
@@ -390,7 +390,7 @@ class role extends CatchController
      * @return Json
      * @throws \think\db\exception\DbException
      */
-    public function saveAssignMenu(CatchRequest $request): \think\response\Json
+    public function saveAssignMenu(XhyRequest $request): \think\response\Json
     {
         $id = $request->param('id');
         try {
@@ -410,7 +410,7 @@ class role extends CatchController
                 $updateRole = Db::table('s_role')->where('role_id', $id)->update($updataData);
                 if ($updateRole === false) {
                     Db::rollback();
-                    return CatchResponse::fail('更新失败');
+                    return XhyResponse::fail('更新失败');
                 }
             }
             //s_menu
@@ -419,13 +419,13 @@ class role extends CatchController
                 $delete_menu_role = Db::table('s_role_function_permission')->where('role_id', $id)->delete();
                 if ($delete_menu_role === false) {
                     Db::rollback();
-                    return CatchResponse::fail('删除失败1');
+                    return XhyResponse::fail('删除失败1');
                 }
                 //删除该角色下所有menu的权限
                 $delete_role = Db::table('s_role_menu_permission')->where('role_id', $id)->delete();
                 if ($delete_role === false) {
                     Db::rollback();
-                    return CatchResponse::fail('删除失败2');
+                    return XhyResponse::fail('删除失败2');
                 }
 
                 //查出所有的menu  和 function 的menu_id
@@ -450,7 +450,7 @@ class role extends CatchController
                 $insert_role = Db::table('s_role_menu_permission')->insertAll($insertMenuData);
                 if ($insert_role === false) {
                     Db::rollback();
-                    return CatchResponse::fail('新增失败');
+                    return XhyResponse::fail('新增失败');
                 }
                 //新增function 权限
                 $insertFunctionData = [];
@@ -462,12 +462,12 @@ class role extends CatchController
                 $insert_role = Db::table('s_role_function_permission')->insertAll($insertFunctionData);
                 if ($insert_role === false) {
                     Db::rollback();
-                    return CatchResponse::fail('新增失败');
+                    return XhyResponse::fail('新增失败');
                 }
             }
             Db::commit();
             $isSuccess = true;
-            return CatchResponse::success();
+            return XhyResponse::success();
         } catch (\Exception $e) {
             //region 异常 (回滚事务/记录日志/返回错误)
             Db::rollback();
@@ -503,7 +503,7 @@ class role extends CatchController
             }
         }
 
-        return CatchResponse::success([], '操作成功');
+        return XhyResponse::success([], '操作成功');
     }
 
 
