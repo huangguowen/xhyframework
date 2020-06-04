@@ -17,16 +17,15 @@ class AuthTokenMiddleware extends Middleware
           JWTAuth::auth();
        } catch (\Exception $e) {
            if ($e instanceof TokenExpiredException) {
-               throw new FailedException('token 过期', Code::LOST_LOGIN);
+               return CatchResponse::fail("token 过期");
            }
            if ($e instanceof TokenBlacklistException) {
-               throw new FailedException('token 被加入黑名单', Code::LOST_LOGIN);
+               return CatchResponse::fail("您已下线");
            }
            if ($e instanceof TokenInvalidException) {
-               throw new FailedException('token 不合法', Code::LOST_LOGIN);
+               return CatchResponse::fail("token 不合法");
            }
-
-           throw new FailedException('登录用户不合法', Code::LOST_LOGIN);
+           return CatchResponse::fail("登录用户不合法");
        }
 
        return $next($request);
