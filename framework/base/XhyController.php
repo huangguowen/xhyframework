@@ -6,7 +6,7 @@ use app\Request;
 use xhyadminframework\XhyAdmin;
 
 use xhyadminframework\model\Users;
-use base\CatchAuth as Auth;
+use base\XhyAuth as Auth;
 use xhyadminframework\Utils;
 use think\Validate;
 use think\response\Json;

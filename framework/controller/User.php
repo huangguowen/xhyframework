@@ -10,7 +10,7 @@ namespace xhyadminframework\controller;
 
 use app\Request;
 use xhyadminframework\base\XhyController;
-use base\CatchAuth;
+use base\XhyAuth;
 use xhyadminframework\XhyResponse;
 use xhyadminframework\Tree;
 use xhyadminframework\Utils;
@@ -199,7 +199,7 @@ class User extends XhyController
      * @param $id
      * @return \think\response\Json
      */
-    public function read($id, CatchAuth $auth)
+    public function read($id, XhyAuth $auth)
     {
         $user = $auth->user();
         $user->roles = $this->user->getRole($id);

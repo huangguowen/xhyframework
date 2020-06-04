@@ -16,7 +16,7 @@ use app\Request;
 use xhyadminframework\request\LoginRequest;
 use xhyadminframework\model\Users;
 use xhyadminframework\base\XhyController;
-use base\CatchAuth;
+use base\XhyAuth;
 use xhyadminframework\XhyCacheKeys;
 use xhyadminframework\XhyResponse;
 use xhyadminframework\exceptions\LoginFailedException;
@@ -29,10 +29,10 @@ class Common extends XhyController
    *
    * @time 2019年11月28日
    * @param LoginRequest $request
-   * @param CatchAuth $auth
+   * @param XhyAuth $auth
    * @return bool|string
    */
-  public function login(LoginRequest $request, CatchAuth $auth)
+  public function login(LoginRequest $request, XhyAuth $auth)
   {
       $params = $request->param();
 
@@ -62,10 +62,10 @@ class Common extends XhyController
  * 登出
  *
  * @time 2019年11月28日
- * @param CatchAuth $auth
+ * @param XhyAuth $auth
  * @return \think\response\Json
  */
-  public function logout(CatchAuth $auth, Request $request): \think\response\Json
+  public function logout(XhyAuth $auth, Request $request): \think\response\Json
   {
       $user = $request->user();
       $title = $user->login_name.'已经登出';
@@ -86,13 +86,13 @@ class Common extends XhyController
      * 获取用户信息
      *
      * @time 2020年01月07日
-     * @param CatchAuth $auth
+     * @param XhyAuth $auth
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      * @return \think\response\Json
      */
-    public function info(CatchAuth $auth)
+    public function info(XhyAuth $auth)
     {
         $user = $auth->user();
         $sql = '

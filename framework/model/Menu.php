@@ -4,10 +4,10 @@ namespace xhyadminframework\model;
 
 use xhyadminframework\base\XhyModel;
 use think\facade\Db;
-use base\CatchAuth;
+use base\XhyAuth;
 use think\Model;
 
-class Menu extends CatchModel
+class Menu extends XhyModel
 {
 
 
