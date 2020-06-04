@@ -1,4 +1,8 @@
 <?php
+
+use think\Route;
+
+$router = app(Route::class);
 //其他中间件
 $routeMiddleware = config('xhy.middleware');
 

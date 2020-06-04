@@ -1,6 +1,7 @@
 <?php
 namespace xhyadminframework\middleware;
 
+use catcher\CatchResponse;
 use catcher\Code;
 use catcher\exceptions\FailedException;
 use thans\jwt\exception\TokenBlacklistException;
