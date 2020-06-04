@@ -10,6 +10,7 @@
 namespace xhyadminframework\controller;
 
 use xhyadminframework\base\XhyController;
+use xhyadminframework\base\XhyRequest;
 use xhyadminframework\Utils;
 use think\facade\Db;
 
