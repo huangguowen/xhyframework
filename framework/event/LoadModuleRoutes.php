@@ -42,10 +42,10 @@ class LoadModuleRoutes
         include $routes[1];
         // 新项目加载登录
         if (!empty(\think\facade\Env::get('appconfig.APPNAME'))) {
-            include app()->getRootPath().\think\facade\Env::get('appconfig.APPNAME').'\route.php';
+            include app()->getRootPath().\think\facade\Env::get('appconfig.APPNAME').'/route.php';
         }
         //不需要登录的模块
-        include app()->getRootPath().\think\facade\Env::get('appconfig.APPNAME').'\noMiddlewareRoute.php';
+        include app()->getRootPath().\think\facade\Env::get('appconfig.APPNAME').'/noMiddlewareRoute.php';
 
     }
 }
