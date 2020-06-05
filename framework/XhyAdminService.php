@@ -3,6 +3,7 @@ namespace xhyadminframework;
 use think\exception\Handle;
 use think\facade\Validate;
 use think\Service;
+use xhyadminframework\exceptions\XhyException;
 use xhyadminframework\XhyQuery;
 
 class XhyAdminService extends Service
@@ -108,6 +109,6 @@ class XhyAdminService extends Service
      */
     protected function registerExceptionHandle(): void
     {
-        $this->app->bind(Handle::class, CatchExceptionHandle::class);
+        $this->app->bind(Handle::class, XhyExceptionHandle::class);
     }
 }

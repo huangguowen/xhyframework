@@ -37,6 +37,7 @@ class LoadModuleRoutes
                 }
             })->middleware($routeMiddleware);
         }
+
         //framework的未登录
         include $routes[1];
         // 新项目加载登录
@@ -45,5 +46,6 @@ class LoadModuleRoutes
         }
         //不需要登录的模块
         include app()->getRootPath().\think\facade\Env::get('appconfig.APPNAME').'\noMiddlewareRoute.php';
+
     }
 }

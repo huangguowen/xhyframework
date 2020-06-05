@@ -109,10 +109,10 @@ class Menu extends XhyController
                 return $this->fail('菜单受保护，不允许删除');
             }
             // 获取菜单下的操作
-            $actionInfo = Db::name('s_menu_function')->where('menu_id', $id)->field('menu_function_id')->select()->toArray();
+            $acitonInfo = Db::name('s_menu_function')->where('menu_id', $id)->value('menu_function_id');
             // 删除角色拥有的菜单操作权限
-            if ($actionInfo) {
-                Db::name('s_role_function_permission')->where('menu_function_id', 'in', $actionInfo)->where('menu_id', $id)->delete();
+            if ($acitonInfo) {
+                Db::name('s_role_function_permission')->where('menu_function_id', 'in', $acitonInfo)->where('menu_id', $id)->delete();
             }
             // 删除角色拥有的菜单权限
             Db::name('s_role_menu_permission')->where('menu_id', $id)->delete();

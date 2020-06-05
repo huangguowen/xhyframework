@@ -32,33 +32,33 @@ class Common extends XhyController
    * @param XhyAuth $auth
    * @return bool|string
    */
-   public function login(LoginRequest $request, XhyAuth $auth)
-    {
-        $params = $request->param();
+  public function login(LoginRequest $request, XhyAuth $auth)
+  {
+      $params = $request->param();
 
-        $token = $auth->attempt($params);
-        if (is_array($token)) {
-            return XhyResponse::fail($token[0]);
-        }
-        $user = $auth->user();
+      $token = $auth->attempt($params);
+      if (is_array($token)) {
+          return XhyResponse::fail($token[0]);
+      }
+      $user = $auth->user();
 
-        if ($user->is_enabled != Users::ENABLE) {
-            return XhyResponse::fail('该用户已被禁用');
-        }
-        $roles = Db::table('s_user_in_role')->where('user_id', $user->user_id)->select()->toArray();
-        //还未分配角色
-        if (empty($roles)) {
-            return XhyResponse::fail('请向管理员分配此账号角色');
-        }
-        $title = $user->login_name.'已经登录';
-        $logDetail ='';
-        // 2020-5-27 日志修改  yjj
-        Utils::writeLog("info", $this->Request, $user->user_id, $user->user_name, $title, $logDetail);
+      if ($user->is_enabled != Users::ENABLE) {
+          return XhyResponse::fail('该用户已被禁用');
+      }
+      $roles = Db::table('s_user_in_role')->where('user_id', $user->user_id)->select()->toArray();
+      //还未分配角色
+      if (empty($roles)) {
+          return XhyResponse::fail('请向管理员分配此账号角色');
+      }
+      $title = $user->login_name.'已经登录';
+      $logDetail ='';
+      // 2020-5-27 日志修改  yjj
+      Utils::writeLog("info", $this->Request, $user->user_id, $user->user_name, $title, $logDetail);
 
-        return $token ? XhyResponse::success([
-            'token' => $token,
-        ], '登录成功') : XhyResponse::success('', '登录失败');
-    }
+      return $token ? XhyResponse::success([
+          'token' => $token,
+      ], '登录成功') : XhyResponse::success('', '登录失败');
+  }
 
 /**
  * 登出
