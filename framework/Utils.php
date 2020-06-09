@@ -7,6 +7,129 @@ use think\helper\Str;
 
 class Utils
 {
+
+
+    /**
+     * 获取列表数据
+     * @param $param
+     * @param int $page
+     * @param int $limit
+     * @param $total
+     * @return mixed
+     * @author: lampzww
+     * @Date: 10:19  2020/6/9
+     */
+    public static function select($db, $param = [], $page = 0, $limit = 0)
+    {
+        $field  =   "*";
+        $model  =   Db::name($db);
+        isset($param['map'])    &&  $model->where($param['map']);
+        isset($param['alias'])  &&  $model->alias($param['alias']);
+        isset($param['join'])   &&  $model->join($param['join']);
+        isset($param['group'])  &&  $model->group($param['group']);
+        isset($param['field'])  &&  $field  =   $param['field'];
+        if($param['order']){
+            is_string($param['order'])  &&  $model->order($param['order'],'asc');
+            is_array($param['order'])   &&  $model->order($param['order']['name'],isset($param['mod']) ? $param['mod'] : 'asc');
+        }
+
+        #TODO 模型操作
+
+
+        if($page   &&  $limit){
+            $model->page($page, $limit);
+            $total  =   $model->field($field)->count();
+            return  ['list'=>$model->field($field)->select()->toArray(),'total'=>$total];
+        }else{
+            return  $model->field($field)->select()->toArray();
+        }
+    }
+
+    /**
+     * 获取单条数据
+     * @param $id
+     * @param string $field
+     * @param array $param
+     * @return mixed
+     * @author: lampzww
+     * @Date: 10:28  2020/6/9
+     */
+    public static function read($db, $id, $field = '*',$param = [])
+    {
+        $map    =   [];
+        $model  =   Db::name($db);
+        (is_numeric($id)    ||  is_string($id)) &&  $map[]  =   [$model->getPk(), '=', $id];
+        is_string($id)  &&  !is_numeric($id)  &&  strpos($id, 'and') !== false  &&    $map    =   $id;
+        is_array($id)   &&  $map    =   $id;
+        isset($param['alias'])  &&  $model->alias($param['alias']);
+        isset($param['join'])   &&  $model->join($param['join']);
+
+
+        #TODO 模型操作
+        return  $model->where($map)->field($field)->find();
+    }
+
+    /**
+     * 获取最大排序值
+     * @param $db
+     * @param $parent_field
+     * @param $parent_id
+     * @param string $field
+     * @return int|mixed
+     * @author: lampzww
+     * @Date: 13:54  2020/6/9
+     */
+    public static function getSortNumb($db,$parent_field,$parent_id,$field = 'sort_number')
+    {
+        $max = Db::table($db)->where($parent_field, $parent_id)->max($field);
+        return ((int)$max + 1);
+    }
+
+
+    /**
+     * 通过当前的父分类id获取树节点ID
+     * @param $db
+     * @param $parent_field
+     * @param $parent_id
+     * @param $treefield
+     * @return string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author: lampzww
+     * @Date: 11:20  2020/6/9
+     */
+    public static function getTreeId($db,$parent_field, $parent_id, $treefield)
+    {
+        $model = Db::table($db);
+        $tree = '00001';
+        //  获取当前最大的树节点id
+        $query = "select max($parent_field) as max_treeid from $db where $parent_field='" . $parent_id . "'";
+        $max = Db::query($query);
+        $maxTreeId = $max[0]['max_treeid'];
+
+        // 如果当前分类的父分类id为0  即当前分类是顶级分类 新增时用
+        if ($parent_id == "0") {
+            // 顶级分类 的最大值存在 则新的树id 为 最大值+1
+            $tree = (str_pad($maxTreeId + 1, strlen($maxTreeId), "0", STR_PAD_LEFT));
+
+        } else {
+            // 如果不是顶级分类
+            // 如果有最大值  最大值+1
+            if (strlen($maxTreeId) > 0) {
+                $tree = (str_pad($maxTreeId + 1, strlen($maxTreeId), "0", STR_PAD_LEFT));
+            } else {
+                // 如果没有 需要获取父节点的treeid
+                $info = $model->where($model->getPk(), $parent_id)->find();
+
+                $tree = $info[$treefield] . $tree;
+            }
+
+        }
+        return $tree;
+    }
+
+
     /**
      * 字符串转换成数组
      *
@@ -207,9 +330,13 @@ class Utils
     public static function writeLog($logType, $request, $userID, $userName, $logTitle, $logDetail)
     {
         $route = $request->rule()->getName();
+        $logTable = 's_system_log_data';
+        if (!empty(\think\facade\Env::get('appconfig.APPTABLE'))) {
+            $logTable = \think\facade\Env::get('appconfig.APPTABLE');
+        }
         $params =  urldecode(json_encode($request->param(), JSON_UNESCAPED_UNICODE));
         $userAgent = $request->header['user-agent'];
-       // $ip = $request->server['HTTP_ORIGIN'];
+        // $ip = $request->server['HTTP_ORIGIN'];
         $ip = self::get_client_ip();
 
         if ($logType == "info") {
@@ -234,7 +361,7 @@ class Utils
             "server_node" => "",
             "terminal_name" => ""
         ];
-        Db::table("s_system_log_data")->insert($entity);
+        Db::table($logTable)->insert($entity);
     }
 
 
