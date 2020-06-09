@@ -49,12 +49,11 @@ abstract class XhyController
     /**
      * 验证参数
      */
-    public function checkParams($rule, $msg)
+    public function checkParams($rule)
     {
         //实例化系统验证器
         $validate = new Validate();
         $validate->rule($rule);
-        $validate->message($msg);
         //check验证是否正确
         $checkData = $this->Request->param();
         $result = $validate->check($checkData);
