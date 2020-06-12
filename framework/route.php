@@ -57,3 +57,11 @@ $router->get('dict/list', '\xhyadminframework\controller\Dict@dictList');
 $router->put('dict/listSort', '\xhyadminframework\controller\Dict@listSort');
 $router->put('dict/switch/status/<id>', '\xhyadminframework\controller\Dict@switchStatus');
 
+//系统参数管理
+$router->resource('config', '\xhyadminframework\controller\Config');
+$router->post('config/save', '\xhyadminframework\controller\Config@save');
+$router->get('config/group', '\xhyadminframework\controller\Config@getGroup');
+$router->post('config/update', '\xhyadminframework\controller\Config@add');
+$router->get('config/read', '\xhyadminframework\controller\Config@read');
+$router->get('config/delete', '\xhyadminframework\controller\Config@delete');
+
