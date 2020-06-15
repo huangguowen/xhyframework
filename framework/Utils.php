@@ -30,7 +30,7 @@ class Utils
 
         if(isset($param['join'])){
             foreach ($param['join'] as $item){
-                $model->join($item[0],$item[1]);
+                $model->join($item[0],$item[1],isset($item['type']) ? $item['type'] : 'INNER');
             }
         }
         if($param['order']){
@@ -67,7 +67,11 @@ class Utils
         is_string($id)  &&  !is_numeric($id)  &&  strpos($id, 'and') !== false  &&    $map    =   $id;
         is_array($id)   &&  $map    =   $id;
         isset($param['alias'])  &&  $model->alias($param['alias']);
-        isset($param['join'])   &&  $model->join($param['join']);
+        if(isset($param['join'])){
+            foreach ($param['join'] as $item){
+                $model->join($item[0],$item[1],isset($item['type']) ? $item['type'] : 'INNER');
+            }
+        }
 
 
         #TODO 模型操作
