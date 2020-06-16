@@ -25,9 +25,14 @@ class Utils
         $model  =   Db::name($db);
         isset($param['map'])    &&  $model->where($param['map']);
         isset($param['alias'])  &&  $model->alias($param['alias']);
-        isset($param['join'])   &&  $model->join($param['join']);
         isset($param['group'])  &&  $model->group($param['group']);
         isset($param['field'])  &&  $field  =   $param['field'];
+
+        if(isset($param['join'])){
+            foreach ($param['join'] as $item){
+                $model->join($item[0],$item[1],isset($item['type']) ? $item['type'] : 'INNER');
+            }
+        }
         if($param['order']){
             is_string($param['order'])  &&  $model->order($param['order'],'asc');
             is_array($param['order'])   &&  $model->order($param['order']['name'],isset($param['mod']) ? $param['mod'] : 'asc');
@@ -62,7 +67,11 @@ class Utils
         is_string($id)  &&  !is_numeric($id)  &&  strpos($id, 'and') !== false  &&    $map    =   $id;
         is_array($id)   &&  $map    =   $id;
         isset($param['alias'])  &&  $model->alias($param['alias']);
-        isset($param['join'])   &&  $model->join($param['join']);
+        if(isset($param['join'])){
+            foreach ($param['join'] as $item){
+                $model->join($item[0],$item[1],isset($item['type']) ? $item['type'] : 'INNER');
+            }
+        }
 
 
         #TODO 模型操作
@@ -70,18 +79,66 @@ class Utils
     }
 
     /**
+     * 删除数据
+     * @param $db
+     * @param $id
+     * @return int
+     * @throws \think\db\exception\DbException
+     * @author: lampzww
+     * @Date: 12:00  2020/6/12
+     */
+    public static function delete($db,$id)
+    {
+        $map    =   [];
+        $model  =   Db::name($db);
+        (is_numeric($id)    ||  is_string($id)) &&  $map[]  =   [$model->getPk(), '=', $id];
+        is_string($id)  &&  !is_numeric($id)  &&  strpos($id, 'and') !== false  &&    $map    =   $id;
+        is_array($id)   &&  $map    =   $id;
+
+        return  $model->where($map)->delete();
+    }
+
+    /**
+     * 保存数据
+     * @param $db
+     * @param $data
+     * @param string $id
+     * @return int|string
+     * @throws \think\db\exception\DbException
+     * @author: lampzww
+     * @Date: 14:19  2020/6/12
+     */
+    public static function save($db, $data, $id = '')
+    {
+        $map    =   [];
+        $model  =   Db::name($db);
+        (is_numeric($id)    ||  is_string($id)) &&  $map[]  =   [$model->getPk(), '=', $id];
+        is_string($id)  &&  !is_numeric($id)  &&  strpos($id, 'and') !== false  &&    $map    =   $id;
+        is_array($id)   &&  $map    =   $id;
+        if ($id){
+            return  $model->where($map)->replace()->update($data);
+        }else{
+            $data[$model->getPk()]  =   self::guid();
+            return  $model->replace()->insert($data);
+        }
+
+    }
+
+    /**
      * 获取最大排序值
      * @param $db
-     * @param $parent_field
-     * @param $parent_id
+     * @param string $parent_field
+     * @param string $parent_id
      * @param string $field
-     * @return int|mixed
+     * @return int
      * @author: lampzww
-     * @Date: 13:54  2020/6/9
+     * @Date: 14:31  2020/6/12
      */
-    public static function getSortNumb($db,$parent_field,$parent_id,$field = 'sort_number')
+    public static function getSortNumb($db,$parent_field = '',$parent_id = '',$field = 'sort_number')
     {
-        $max = Db::table($db)->where($parent_field, $parent_id)->max($field);
+        $model  =   Db::table($db);
+        $parent_field   &&  $model->where($parent_field, $parent_id);
+        $max = $model->max($field);
         return ((int)$max + 1);
     }
 
