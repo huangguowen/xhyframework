@@ -8,6 +8,7 @@
  */
 namespace xhyadminframework\base;
 
+use function EasyWeChat\Kernel\data_to_array;
 use \think\facade\Filesystem;
 
 class XhyUpload
@@ -37,15 +38,13 @@ class XhyUpload
      * @author: lampzww
      * @Date: 9:31  2020/6/10
      */
-    public function putFile()
+    public function putFile($filed)
     {
         switch (config('filesystem.default')){
             case 'local':
             case 'public':
                 $type   =   request()->param('type','images','trim');//上传类型
-                $field  =   request()->param('field','img', 'trim');//接收字段
-                $url    =   self::local($type, $field);
-
+                $url    =   self::local($type, $filed);
                 break;
             case 'qiniu'://七牛云
                 return $this->qiniu();
@@ -85,7 +84,7 @@ class XhyUpload
         }
 
         $savename = Filesystem::disk('public')->putFile($type, $file, $name_rule);
-        $path   =   ((int)$_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']. '/' .
+        $path   =   ((int)request()->port() == 443 ? 'https' : 'http') . '://' . request()->host().
             config('filesystem.disks.'.config('filesystem.default').'.url'). '/'.
             $savename;
         return str_replace('\\','/',$path);
