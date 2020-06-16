@@ -60,6 +60,7 @@ class XhyUpload
         if($url){
             $param  =   request()->param();
             $param['url']   =   $url;
+            $this->writeFileBase($param);
             return $param;
         }else{
             return  false;
@@ -114,5 +115,18 @@ class XhyUpload
     public function getError()
     {
         return $this->error;
+    }
+
+    /**
+     * 事件写文件存储器
+     * @author: huangguowen
+     */
+    public function writeFileBase($parm)
+    {
+        $baseEvent = config('xhy.filesystem');
+        if (!empty($baseEvent)) {
+            event($baseEvent, $parm);
+        }
+        return true;
     }
 }
