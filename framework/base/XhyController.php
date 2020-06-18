@@ -34,6 +34,12 @@ abstract class XhyController
             $this->userName = '';
         }
         $this->ip = $request->ip();
+        $this->init();
+    }
+
+    public function init()
+    {
+
     }
 
     public function logInfo($logTitle, $logDetail = "")
