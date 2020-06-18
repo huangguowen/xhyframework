@@ -27,15 +27,12 @@ class Utils
         isset($param['alias'])  &&  $model->alias($param['alias']);
         isset($param['group'])  &&  $model->group($param['group']);
         isset($param['field'])  &&  $field  =   $param['field'];
+        isset($param['order'])  &&  $model->order($param['order']);
 
         if(isset($param['join'])){
             foreach ($param['join'] as $item){
                 $model->join($item[0],$item[1],isset($item['type']) ? $item['type'] : 'INNER');
             }
-        }
-        if($param['order']){
-            is_string($param['order'])  &&  $model->order($param['order'],'asc');
-            is_array($param['order'])   &&  $model->order($param['order']['name'],isset($param['mod']) ? $param['mod'] : 'asc');
         }
 
         #TODO 模型操作
