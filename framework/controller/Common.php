@@ -98,9 +98,10 @@ class Common extends XhyController
     {
         $user = $auth->user();
         $sql = '
-            (
+            ((
                 select 
                     menu_id as id ,
+                    sort_number,
                     component_name as component,
                     is_expand,
                     small_icon as icon,
@@ -118,8 +119,9 @@ class Common extends XhyController
             )
                 union all
                     
-                select 
+                (select 
                     menu_function_id as id ,
+                    sort_number,
                     component_name as component,
                     2 as is_expand,
                     "home" as icon,
@@ -132,7 +134,7 @@ class Common extends XhyController
                     permission_id as permisson_name
                 from 
                     v_user_function_permisson  
-                where user_id="' . $user->user_id . '"
+                where user_id="' . $user->user_id . '")) order by sort_number
         ';
         $roles = Db::table('s_user_in_role')->where('user_id', $user->user_id)->select()->toArray();
         $permissions = Db::query($sql);
