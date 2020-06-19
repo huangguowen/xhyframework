@@ -83,10 +83,10 @@ class Config extends XhyController
      */
     private function saveConfig($groupid)
     {
-        $config = Db::name('s_config')->where(['groupid'=>$groupid])->column("name");
-        if($config)foreach ($config as $name){
-            $val = input($name,"","trim");
-            Db::name('s_config')->where(['name'=> $name])->update(['value'=>serialize($val)]);
+        $config = Db::name('s_config')->where(['groupid'=>$groupid])->column("name,gname");
+        if($config)foreach ($config as $item){
+            $val = input($item['name'],"","trim");
+            Db::name('s_config')->where(['name'=> $item['name'],'groupid'=>$groupid,'gname'=>$item['gname']])->update(['value'=>serialize($val)]);
         }
         cache("DB_CONFIG_DATA",null); //清除缓存
     }
@@ -125,8 +125,10 @@ class Config extends XhyController
         $data    = input("data","","trim");
         $about	= input("about","","trim");
         $uridata = input('uridata',"",'trim');
+        $gname = input('gname',"",'trim');
+        $value = input('value',"",'trim');
 
-        if($config_name != $name && Db::name('s_config')->where(['name'=>$name])->count()>0)   return $this->fail("参数名[{$name}]已存在");
+        if($config_name != $name && Db::name('s_config')->where(['name'=>$name,'groupid'=>$groupid,'gname'=>$gname])->count()>0)   return $this->fail("参数名[{$name}]已存在");
 
         if(in_array($type, ["select","checkbox","radio"])){
             if($data == ""){
@@ -158,9 +160,9 @@ class Config extends XhyController
                 'about'	=> $about,
                 'sort'=>$sort,
                 'uridata'  => $uridata,
-                'gname'  => input('gname'),//组件名
+                'gname'  => $gname,//组件名
             ];
-            $result = Db::name('s_config')->where(['name'=>$config_name])->update($config_data);
+            $result = Db::name('s_config')->where(['name'=>$config_name,'groupid'=>$groupid,'gname'=>$gname])->update($config_data);
         }else{
             if($sort == 0){
                 $sort = Db::name('s_config')->where("groupid = ".$groupid)->max("sort");
@@ -174,9 +176,9 @@ class Config extends XhyController
                 'groupid'   => $groupid,
                 'about'		=> $about,
                 'sort' => $sort,
-                'value'=>   '',
+                'value'=>   $value ? serialize($value) : '',
                 'uridata'=>   '',//附加参数 #TODO
-                'gname'  => input('gname'),//组件名
+                'gname'  => $gname,//组件名
             ];
             $result = Db::name('s_config')->insert($config_data);
         }
@@ -196,8 +198,8 @@ class Config extends XhyController
      */
     public function delete()
     {
-        $name       =   input('ename','','trim');
-        $map        =   ['name'=>$name];
+        $id         =   input('id','','intval');
+        $map        =   ['id'=>$id];
         $result     =   Db::name('s_config')->where($map)->delete();
         if ($result === false){
             return $this->fail('操作失败!');
