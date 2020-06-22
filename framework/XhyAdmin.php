@@ -5,7 +5,7 @@ use think\helper\Arr;
 
 class XhyAdmin
 {
-    public const NAME = 'vendor\huangguowen\xhyframework';
+    public const NAME = 'vendor/huangguowen/xhyframework';
 
     /**
      *

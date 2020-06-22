@@ -10,9 +10,6 @@ namespace xhyadminframework\controller;
 
 
 use xhyadminframework\base\XhyRequest;
-
-use think\Request as Request;
-
 use xhyadminframework\base\XhyController;
 use xhyadminframework\XhyResponse;
 use xhyadminframework\Tree;
@@ -234,7 +231,7 @@ class Menu extends XhyController
 
     /**
      * 添加操作
-     * @param Request $request
+     * @param Request $XhyRequest
      * @return Json
      */
 
@@ -293,7 +290,7 @@ class Menu extends XhyController
     /**
      * 更新操作
      * @param $id
-     * @param Request $request
+     * @param XhyRequest $XhyRequest
      * @return Json
      */
 
@@ -433,7 +430,7 @@ class Menu extends XhyController
      */
     private function onSaveData(XhyRequest $XhyRequest, $id = '')
     {
-        $param = $request->param();
+        $param = $XhyRequest->param();
         $rule = [
             'link_page' => 'require',
             'permission_mark' => 'require',

@@ -140,9 +140,9 @@ class Dict extends XhyController
      * @author: lampzww
      * @Date: 15:15  2020/5/27
      */
-    public function save(XhyRequest $XhyRequest): Json
+    public function save(XhyRequest $request): Json
     {
-        return $this->onSaveData($XhyRequest);
+        return $this->onSaveData($request);
     }
 
     /**
@@ -349,7 +349,7 @@ class Dict extends XhyController
      * @author: lampzww
      * @Date: 15:17  2020/5/27
      */
-    private function onSaveData(XhyRequest $XhyRequest, $id = '')
+    private function onSaveData(XhyRequest $request, $id = '')
     {
         $param = $request->param();
 
