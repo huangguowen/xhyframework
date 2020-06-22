@@ -21,7 +21,7 @@ $router->resource('menu', '\xhyadminframework\controller\Menu');
 $router->post('menu/sort', '\xhyadminframework\controller\Menu@sort');
 $router->get('menu/function/', '\xhyadminframework\controller\Menu@functionList');
 $router->post('menu/functionAdd', '\xhyadminframework\controller\Menu@functionAdd');
-$router->post('menu/functionDel', '\xhyadminframework\controller\Menu@functionDel');
+$router->resource('menu/functionDel', '\xhyadminframework\controller\Menu@functionDel');
 $router->post('menu/functionUpdate/<id>', '\xhyadminframework\controller\Menu@functionUpdate');
 $router->post('menu/sortExchange', '\xhyadminframework\controller\Menu@sortExchange');
 $router->put('menu/switch/<id>', '\xhyadminframework\controller\Menu@switch');
