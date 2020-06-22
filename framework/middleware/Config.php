@@ -23,22 +23,35 @@ class Config
      */
     public function handle($request, \Closure $next)
     {
+        $configs 	=   config();
         //读取数据库基本参数
-        $configs 	= cache("DB_CONFIG_DATA");
-
-        if(!$configs){
-            $data    =   Db::name('s_config')->column('gname,name,value');
-            $configs    =   [];
-            foreach ($data as $item){
-                if($item['gname']){
-                    $configs[$item['gname']][$item['name']] = unserialize($item['value']) ? unserialize($item['value']) : '';
-                }else{
-                    $configs[$item['name']] =   unserialize($item['value']) ? unserialize($item['value']) : '';
-                }
-            }
-            cache("DB_CONFIG_DATA", $configs);
+        if(cache("DB_CONFIG_DATA")){
+            $data   =   cache("DB_CONFIG_DATA");
+        }else{
+            $data    =   Db::name('s_config')->column('gname,name,value,type');
+            cache("DB_CONFIG_DATA", $data);
         }
 
+        //处理参数
+        foreach ($data as $item){
+            if($item['type']    ==  'line'){
+                continue;
+            }
+            $keys   =   explode('.',$item['gname']);//层级  最多4层
+
+            if(isset($keys[3])){
+                $configs[$keys[0]][$keys[1]][$keys[2]][$keys[3]][$item['name']]    =   unserialize($item['value']) ? unserialize($item['value']) : '';
+            }else{
+                if(isset($keys[2])){
+                    $configs[$keys[0]][$keys[1]][$keys[2]][$item['name']]    =   unserialize($item['value']) ? unserialize($item['value']) : '';
+                }else{
+                    if(isset($keys[1])){
+                        $configs[$keys[0]][$keys[1]][$item['name']]    =   unserialize($item['value']) ? unserialize($item['value']) : '';
+                    }
+                }
+            }
+        }
+        //重新设置参数
         foreach ($configs as $key=>$value){
             \think\facade\Config::set($value,$key);
         }
