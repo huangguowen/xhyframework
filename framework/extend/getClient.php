@@ -132,12 +132,12 @@ class getClient {
         }
         $clientPlatform = '';
         foreach((array)self::$platforms as $key => $platform) {
-            if (strstr($platform, $userAgent)) {
+//            if (strstr($platform, $userAgent)) {
                 if (self::match($platform, $userAgent)) {
                     $clientPlatform = $key;
                     break;
                 }
-            }
+//            }
         }
         if($isReTurnVersion && $clientPlatform) {
             $clientPlatform .= ' '.self::getVersion($clientPlatform,$userAgent);
