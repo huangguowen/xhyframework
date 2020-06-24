@@ -31,7 +31,6 @@ class Config
             $data    =   Db::name('s_config')->column('gname,name,value,type');
             cache("DB_CONFIG_DATA", $data);
         }
-
         //处理参数
         foreach ($data as $item){
             if($item['type']    ==  'line'){
@@ -47,6 +46,8 @@ class Config
                 }else{
                     if(isset($keys[1])){
                         $configs[$keys[0]][$keys[1]][$item['name']]    =   unserialize($item['value']) ? unserialize($item['value']) : '';
+                    }else{
+                        $configs[$keys[0]][$item['name']]    =   unserialize($item['value']) ? unserialize($item['value']) : '';
                     }
                 }
             }
