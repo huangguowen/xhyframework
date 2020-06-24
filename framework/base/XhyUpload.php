@@ -84,7 +84,7 @@ class XhyUpload
         }
 
         $savename = Filesystem::disk('public')->putFile($type, $file, $name_rule);
-        $path   =   ((int)request()->port() == 443 ? 'https' : 'http') . '://' . request()->host().
+        $path   =   ((int)request()->port() == 443 ? 'https' : 'http') . '://' . request()->server()['HTTP_X_ORIGINAL_HOST'].
             config('filesystem.disks.'.config('filesystem.default').'.url'). '/'.
             $savename;
         return str_replace('\\','/',$path);
