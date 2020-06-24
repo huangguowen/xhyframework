@@ -83,10 +83,10 @@ class Config extends XhyController
      */
     private function saveConfig($groupid)
     {
-        $config = Db::name('s_config')->where(['groupid'=>$groupid])->column("name,gname");
+        $config = Db::name('s_config')->where(['groupid'=>$groupid])->column("id,name,gname");
         if($config)foreach ($config as $item){
-            $val = input($item['name'],"","trim");
-            Db::name('s_config')->where(['name'=> $item['name'],'groupid'=>$groupid,'gname'=>$item['gname']])->update(['value'=>serialize($val)]);
+            $val = input($item['name'].'@'.$item['id'],"","trim");
+            Db::name('s_config')->where(['id'=>$item['id'],'name'=> $item['name'],'groupid'=>$groupid,'gname'=>$item['gname']])->update(['value'=>serialize($val)]);
         }
         cache("DB_CONFIG_DATA",null); //清除缓存
     }
@@ -118,7 +118,7 @@ class Config extends XhyController
             return $this->fail($paramError);
         }
         $groupid     = input('groupid',1,"intval");
-        $config_name = input("ename","","trim");
+        $id = input("id","","intval");
         $name    = input("name", "", "trim");
         $label   = input("label", "", "trim");
         $type    = input("type", "", "trim");
@@ -127,8 +127,6 @@ class Config extends XhyController
         $uridata = input('uridata',"",'trim');
         $gname = input('gname',"",'trim');
         $value = input('value',"",'trim');
-
-        if($config_name != $name && Db::name('s_config')->where(['name'=>$name,'groupid'=>$groupid,'gname'=>$gname])->count()>0)   return $this->fail("参数名[{$name}]已存在");
 
         if(in_array($type, ["select","checkbox","radio"])){
             if($data == ""){
@@ -150,7 +148,7 @@ class Config extends XhyController
             $data = "";
         }
         $sort = input("sort",0,"intval");
-        if($config_name){
+        if($id){
             $config_data = [
                 'name'  => $name,
                 'label' => $label,
@@ -162,7 +160,7 @@ class Config extends XhyController
                 'uridata'  => $uridata,
                 'gname'  => $gname,//组件名
             ];
-            $result = Db::name('s_config')->where(['name'=>$config_name,'groupid'=>$groupid,'gname'=>$gname])->update($config_data);
+            $result = Db::name('s_config')->where(['id'=>$id,'groupid'=>$groupid])->update($config_data);
         }else{
             if($sort == 0){
                 $sort = Db::name('s_config')->where("groupid = ".$groupid)->max("sort");
@@ -219,8 +217,8 @@ class Config extends XhyController
      */
     public function read()
     {
-        $name   =   input('name','','trim');
-        $data = Db::name('s_config')->where(['name'=>$name])->find();
+        $id   =   input('id','','intval');
+        $data = Db::name('s_config')->where(['id'=>$id])->find();
         if($data){
             unset($data['value']);
             $data['data'] = unserialize($data['data']);
