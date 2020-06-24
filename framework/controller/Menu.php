@@ -106,7 +106,7 @@ class Menu extends XhyController
                 return $this->fail('菜单受保护，不允许删除');
             }
             // 获取菜单下的操作
-            $acitonInfo = Db::name('s_menu_function')->where('menu_id', $id)->value('menu_function_id');
+            $acitonInfo = Db::name('s_menu_function')->where('menu_id', $id)->column('menu_function_id');
             // 删除角色拥有的菜单操作权限
             if ($acitonInfo) {
                 Db::name('s_role_function_permission')->where('menu_function_id', 'in', $acitonInfo)->where('menu_id', $id)->delete();
@@ -262,6 +262,8 @@ class Menu extends XhyController
             if (!$actionInfo) {
                 return $this->fail('删除的记录不存在');
             }
+            Db::name('s_role_function_permission')->whereIn('menu_function_id', $actionInfo)->delete();
+
             $menuModel->deleteFunction($id);
             //日志
             $logTitle = "删除" . $actionInfo['function_name'] . "成功";
@@ -608,15 +610,15 @@ class Menu extends XhyController
     {
         $ids = Utils::stringToArrayBy($id);
         try {
-        foreach ($ids as $_id) {
-            $functionInfo = Db::table('s_menu_function')->where('menu_function_id', $_id)->find();
-            $switch = $functionInfo['is_enabled'] == 1 ? 0 : 1;
-            Db::table('s_menu_function')->where('menu_function_id', $_id)->update(['is_enabled' => $switch]);
-            $logTitle = "启用/禁用" . $functionInfo['function_name'] . "成功";
-            $logDetail = "";
-            $this->logInfo($logTitle, $logDetail);
-            return $this->success('操作成功');
-        }}catch (\Exception $exception){
+            foreach ($ids as $_id) {
+                $functionInfo = Db::table('s_menu_function')->where('menu_function_id', $_id)->find();
+                $switch = $functionInfo['is_enabled'] == 1 ? 0 : 1;
+                Db::table('s_menu_function')->where('menu_function_id', $_id)->update(['is_enabled' => $switch]);
+                $logTitle = "启用/禁用" . $functionInfo['function_name'] . "成功";
+                $logDetail = "";
+                $this->logInfo($logTitle, $logDetail);
+                return $this->success('操作成功');
+            }}catch (\Exception $exception){
             $this->logError("启用/禁用出错", $exception);
             return $this->fail($exception->getMessage());
         }
