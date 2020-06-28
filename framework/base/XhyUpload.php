@@ -21,7 +21,7 @@ class XhyUpload
      */
     protected $file_config = [
         'images'    =>  [
-            'fileSize' => 1048576,
+            'fileSize' => 1048576 * 10,
             'fileExt' => 'jpg,png,gif,jpeg',
             'fileMime' => 'image/jpeg,image/png,image/gif',
         ]
