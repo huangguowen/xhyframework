@@ -10,8 +10,8 @@ class Oss  extends Driver
     protected function createAdapter(): AdapterInterface
     {
         return new OssAdapter(
-            $this->config['accessKey'],
-            $this->config['secretKey'],
+            $this->config['access_key'],
+            $this->config['secret_key'],
             $this->config['end_point'],
             $this->config['bucket'],
             $this->config['is_cname'],
