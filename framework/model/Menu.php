@@ -48,7 +48,7 @@ menu_id as id ,
            menu_name, 
            1 as type
            from v_menu
-           
+           WHERE is_enabled = 1
            union all
            select 
 
@@ -65,6 +65,7 @@ menu_function_id as id ,
            function_name as menu_name, 
            2 as type
            from v_menu_function
+           WHERE is_enabled = 1
 ';
         $permissions = Db::query($sql);
         return $permissions;
