@@ -39,8 +39,8 @@ class Utils
 
 
         if($page   &&  $limit){
-            $model->page($page, $limit);
             $total  =   $model->field($field)->count();
+            $model->page($page, $limit);
             return  ['list'=>$model->field($field)->select()->toArray(),'total'=>$total];
         }else{
             return  $model->field($field)->select()->toArray();
