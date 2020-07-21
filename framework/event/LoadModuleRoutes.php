@@ -26,19 +26,19 @@ class LoadModuleRoutes
         }
         $routeMiddleware = config('xhy.route_middleware');
         //config配置项
-        $configMiddleware = \xhyadminframework\middleware\Config::class;
+        $configMiddleware = [\xhyadminframework\middleware\Config::class];
         if ($domain) {
             $router->domain($domain, function () use ($router, $routes) {
                 foreach ([$routes[0]] as $route) {
                     include $route;
                 }
-            })->middleware(array_push($routeMiddleware, $configMiddleware));
+            })->middleware(array_merge($routeMiddleware, $configMiddleware));
         } else {
             $router->group(function () use ($router, $routes) {
-                foreach ($routes as $route) {
+                foreach ([$routes[0]] as $route) {
                     include $route;
                 }
-            })->middleware(array_push($routeMiddleware, $configMiddleware));
+            })->middleware(array_merge($routeMiddleware, $configMiddleware));
         }
 
         //framework的未登录
