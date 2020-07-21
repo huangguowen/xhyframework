@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
 
 namespace xhyadminframework\event;
 
@@ -22,10 +22,11 @@ class LoadModuleRoutes
 
         $routes = XhyAdmin::getRoutes();
         if (!empty(\think\facade\Env::get('appconfig.APPNAME'))) {
-            $routes = array_merge($routes, [app()->getRootPath().\think\facade\Env::get('appconfig.APPNAME').'/route.php']);
+            $routes = array_merge($routes, [app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/route.php']);
         }
         $routeMiddleware = config('xhy.route_middleware');
-
+        //config配置项
+        $configMiddleware = \xhyadminframework\middleware\Config::class;
         if ($domain) {
             $router->domain($domain, function () use ($router, $routes) {
                 foreach ([$routes[0]] as $route) {
@@ -41,13 +42,18 @@ class LoadModuleRoutes
         }
 
         //framework的未登录
-        include $routes[1];
-        // 新项目加载登录
+        $router->group(function () use ($router, $routes) {
+            foreach ($routes as $route) {
+                include $routes[1];
+            }
+        })->middleware($configMiddleware);
+        // app加载登录
         if (!empty(\think\facade\Env::get('appconfig.APPNAME'))) {
             //不需要登录的模块
-            include app()->getRootPath().\think\facade\Env::get('appconfig.APPNAME').'/noMiddlewareRoute.php';
+            $appNoMiddleRoute = app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/noMiddlewareRoute.php';
+            $router->group(function () use ($router, $appNoMiddleRoute) {
+                include app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/noMiddlewareRoute.php';
+            })->middleware($configMiddleware);
         }
-
-
     }
 }
