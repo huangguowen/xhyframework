@@ -1,6 +1,7 @@
 <?php
 namespace xhyadminframework;
 
+// 10005 不用了 用于auth token
 class Code
 {
     public const SUCCESS = 10000; // 成功
@@ -8,5 +9,5 @@ class Code
     public const VALIDATE_FAILED = 10002; // 验证错误
     public const PERMISSION_FORBIDDEN = 10003; // 权限禁止
     public const LOGIN_FAILED = 10004; // 登录失败
-    public const FAILED = 10005; // 操作失败
+    public const FAILED = 10010; // 操作失败
 }
