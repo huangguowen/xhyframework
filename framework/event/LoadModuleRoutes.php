@@ -32,25 +32,32 @@ class LoadModuleRoutes
                 foreach ([$routes[0]] as $route) {
                     include $route;
                 }
-            })->middleware($routeMiddleware);
+            })->middleware(array_push($routeMiddleware, $configMiddleware));
         } else {
             $router->group(function () use ($router, $routes) {
                 foreach ($routes as $route) {
                     include $route;
                 }
-            })->middleware($routeMiddleware);
+            })->middleware(array_push($routeMiddleware, $configMiddleware));
         }
 
         //framework的未登录
         $router->group(function () use ($router, $routes) {
             include $routes[1];
         })->middleware($configMiddleware);
+
         // app加载登录
         if (!empty(\think\facade\Env::get('appconfig.APPNAME'))) {
             //不需要登录的模块
             $router->group(function () use ($router) {
                 include app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/noMiddlewareRoute.php';
             })->middleware($configMiddleware);
+        }
+        // 做游客登录需要用到 游客登录的 路由名称是 vistorRoute.php (在路由加中间件 易于管理)
+        if (file_exists(app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/vistorRoute.php')) {
+            $router->group(function () use ($router) {
+                include app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/vistorRoute.php';
+            });
         }
     }
 }
