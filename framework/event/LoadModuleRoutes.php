@@ -29,13 +29,13 @@ class LoadModuleRoutes
         $configMiddleware = [\xhyadminframework\middleware\Config::class];
         if ($domain) {
             $router->domain($domain, function () use ($router, $routes) {
-                foreach ([$routes[0]] as $route) {
+                foreach ([$routes[0], @$routes[2]] as $route) {
                     include $route;
                 }
             })->middleware(array_merge($routeMiddleware, $configMiddleware));
         } else {
             $router->group(function () use ($router, $routes) {
-                foreach ([$routes[0]] as $route) {
+                foreach ([$routes[0], @$routes[2]] as $route) {
                     include $route;
                 }
             })->middleware(array_merge($routeMiddleware, $configMiddleware));
