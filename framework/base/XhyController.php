@@ -3,6 +3,9 @@
 namespace xhyadminframework\base;
 
 use app\Request;
+use think\Exception;
+use think\Route;
+use xhyadminframework\exceptions\AuthException;
 use xhyadminframework\XhyAdmin;
 
 use xhyadminframework\model\Users;
@@ -26,15 +29,26 @@ abstract class XhyController
 
         $this->Request = $request;
 
-        if (@$request->header()['authorization']) {
-            $this->userID = $this->auth->user()->user_id;
-            $this->userName = $this->auth->user()->user_name;
-        } else {
-            $this->userID = '';
-            $this->userName = '';
+        try {
+            if (@$request->header()['authorization']) {
+                $this->userID = $this->auth->user()->user_id;
+                $this->userName = $this->auth->user()->user_name;
+            } else {
+                $this->userID = '';
+                $this->userName = '';
+            }
+            $this->ip = $request->ip();
+            $this->init();
+        } catch (\Exception $exception) {
+            $message = $exception->getMessage();
+            $code = getTokenMessageToCode($message);
+            if ($code == 30001) {
+                $this->account_id == false;
+                throw new AuthException($message);
+            }
+            $this->init();
         }
-        $this->ip = $request->ip();
-        $this->init();
+
     }
 
     public function init()
