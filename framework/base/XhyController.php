@@ -33,9 +33,11 @@ abstract class XhyController
             if (@$request->header()['authorization']) {
                 $this->userID = $this->auth->user()->user_id;
                 $this->userName = $this->auth->user()->user_name;
+                $this->account_id = $this->auth->user()->account_id;
             } else {
                 $this->userID = '';
                 $this->userName = '';
+                $this->account_id = '';
             }
             $this->ip = $request->ip();
             $this->init();
@@ -43,7 +45,7 @@ abstract class XhyController
             $message = $exception->getMessage();
             $code = getTokenMessageToCode($message);
             if ($code == 30001) {
-                $this->account_id == false;
+                $this->account_id = '';
                 throw new AuthException($message);
             }
             $this->init();
