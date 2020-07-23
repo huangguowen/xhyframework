@@ -44,8 +44,11 @@ abstract class XhyController
         } catch (\Exception $exception) {
             $message = $exception->getMessage();
             $code = getTokenMessageToCode($message);
-            if ($code == 30001) {
+            if ($code == 30001 and !in_array($request->pathinfo(), config('xhy.refresh_token'))) {
                 $this->account_id = '';
+                throw new AuthException($message);
+            }
+            if ($message == 'The token is in blacklist.') {
                 throw new AuthException($message);
             }
             $this->init();
