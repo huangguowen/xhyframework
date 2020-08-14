@@ -4,7 +4,7 @@ namespace xhyadminframework\middleware;
 
 use app\Request;
 use xhyadminframework\model\Menu;
-use xhyadminframework\CatchCacheKeys;
+use xhyadminframework\XhyCacheKeys;
 use xhyadminframework\Code;
 use xhyadminframework\exceptions\PermissionForbiddenException;
 use think\facade\Cache;
@@ -56,7 +56,7 @@ class PermissionsMiddleware
         if ($request->isGet() && config('xhy.permissions.is_allow_get')) {
             return $next($request);
         }
-        if (!$permission || !in_array($permission['menu_id'], Cache::get(CatchCacheKeys::USER_PERMISSIONS . $user->user_id), 'menu_id')) {
+        if (!$permission || !in_array($permission['menu_id'], Cache::get(XhyCacheKeys::USER_PERMISSIONS . $user->user_id), 'menu_id')) {
             throw new PermissionForbiddenException();
         }
 
