@@ -7,33 +7,34 @@ $router = app(Route::class);
 $routeMiddleware = config('xhy.middleware');
 
 //公共模块
-$router->resource('common', '\xhyadminframework\controller\Common');
+$router->post('common', '\xhyadminframework\controller\Common');
 $router->get('user/info', '\xhyadminframework\controller\Common@info');
 $router->put('user/switch/status/<id>', '\xhyadminframework\controller\User@switchStatus');
+
 
 
 //主页仪表盘
 $router->resource('dashboard', '\xhyadminframework\controller\Dashboard');
 
 //菜单模块
-$router->resource('menu', '\xhyadminframework\controller\Menu');
+$router->post('menu', '\xhyadminframework\controller\Menu');
 $router->post('menu/sort', '\xhyadminframework\controller\Menu@sort');
 $router->get('menu/function/', '\xhyadminframework\controller\Menu@functionList');
 $router->post('menu/functionAdd', '\xhyadminframework\controller\Menu@functionAdd');
-$router->resource('menu/functionDel', '\xhyadminframework\controller\Menu@functionDel');
+$router->post('menu/functionDel', '\xhyadminframework\controller\Menu@functionDel');
 $router->post('menu/functionUpdate/<id>', '\xhyadminframework\controller\Menu@functionUpdate');
 $router->post('menu/sortExchange', '\xhyadminframework\controller\Menu@sortExchange');
 $router->put('menu/switch/<id>', '\xhyadminframework\controller\Menu@switch');
 
 //角色模块
-$router->resource('role', '\xhyadminframework\controller\Role');
+$router->post('role', '\xhyadminframework\controller\Role');
 $router->post('role/getAllMenuData', '\xhyadminframework\controller\Role@getAllMenuData');
 $router->post('role/getAssignedMenuData', '\xhyadminframework\controller\Role@getAssignedMenuData');
-$router->resource('role/saveAssignMenu', '\xhyadminframework\controller\Role@saveAssignMenu');
-$router->resource('role/swtichStatus', '\xhyadminframework\controller\Role@swtichStatus');
+$router->post('role/saveAssignMenu', '\xhyadminframework\controller\Role@saveAssignMenu');
+$router->post('role/swtichStatus', '\xhyadminframework\controller\Role@swtichStatus');
 
 //用户模块
-$router->resource('user', '\xhyadminframework\controller\User')->middleware($routeMiddleware);
+$router->post('user', '\xhyadminframework\controller\User')->middleware($routeMiddleware);
 $router->get('user/getRolesByUserId', '\xhyadminframework\controller\User@getRolesByUserId');
 $router->post('user/updatePassword/<id>', '\xhyadminframework\controller\User@updatePassword');
 
@@ -42,22 +43,22 @@ $router->post('basic/updateProfile', '\xhyadminframework\controller\User@updateP
 $router->get('basic/getProfile', '\xhyadminframework\controller\User@getProfile');
 
 //系统日志
-$router->resource('log', '\xhyadminframework\controller\Log');
+$router->post('log', '\xhyadminframework\controller\Log');
 $router->get('log/category', '\xhyadminframework\controller\Log@getCategoryList');
 
 
 //单位模块
-$router->resource('unit', '\xhyadminframework\controller\Unit');
+$router->post('unit', '\xhyadminframework\controller\Unit');
 
 //字典模块
-$router->resource('dict', '\xhyadminframework\controller\Dict');
+$router->post('dict', '\xhyadminframework\controller\Dict');
 $router->post('dict/sort', '\xhyadminframework\controller\Dict@sort');
 $router->get('dict/list', '\xhyadminframework\controller\Dict@dictList');
 $router->put('dict/listSort', '\xhyadminframework\controller\Dict@listSort');
 $router->put('dict/switch/status/<id>', '\xhyadminframework\controller\Dict@switchStatus');
 
 //系统参数管理
-$router->resource('config', '\xhyadminframework\controller\Config');
+$router->post('config', '\xhyadminframework\controller\Config');
 $router->post('config/save', '\xhyadminframework\controller\Config@save');
 $router->get('config/group', '\xhyadminframework\controller\Config@getGroup');
 $router->post('config/update', '\xhyadminframework\controller\Config@add');
