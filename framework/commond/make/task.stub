@@ -1,0 +1,17 @@
+<?php
+declare (strict_types = 1);
+
+namespace {%namespace%};
+
+class {%className%}
+{
+    /**
+     * 核心异步逻辑
+     *
+     * @return mixed
+     */
+    public function handle($array)
+    {
+
+    }
+}

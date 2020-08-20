@@ -10,7 +10,6 @@ $routeMiddleware = config('xhy.middleware');
 $router->resource('common', '\xhyadminframework\controller\Common');
 $router->get('user/info', '\xhyadminframework\controller\Common@info');
 $router->put('user/switch/status/<id>', '\xhyadminframework\controller\User@switchStatus');
-$router->post('common/logout', '\xhyadminframework\controller\Common@logout');
 
 
 //主页仪表盘
