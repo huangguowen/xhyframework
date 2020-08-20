@@ -26,15 +26,16 @@ class PermissionsMiddleware
     public function handle(Request $request, \Closure $next)
     {
 
-        $rule = $request->rule()->getName();
+        $rule = $request->rule()->getRule();
 
         if (!$rule) {
             return $next($request);
         }
         // 模块忽略
-        [$module, $controller, $action] = $this->parseRule($rule);
+        [$controller, $action] = $this->parseRule($rule);
+
         // toad
-        if (in_array($module, $this->ignoreModule())) {
+        if (in_array($controller, $this->ignoreModule())) {
 
             return $next($request);
         }
@@ -44,7 +45,7 @@ class PermissionsMiddleware
             throw new PermissionForbiddenException('Login is invalid', Code::LOST_LOGIN);
         }
         //dd($this->parseRule($rule));
-        $permission = $this->getPermission($module, $controller, $action);
+        $permission = $this->getPermission($controller, $action);
 
         // 记录操作
         //        $this->operateEvent($request->user()->user_id, $permission);
@@ -52,11 +53,12 @@ class PermissionsMiddleware
         if ($request->user()->user_id === config('xhy.permissions.super_admin_id')) {
             return $next($request);
         }
+
         // Get 请求
         if ($request->isGet() && config('xhy.permissions.is_allow_get')) {
             return $next($request);
         }
-        if (!$permission || !in_array($permission['menu_id'], Cache::get(XhyCacheKeys::USER_PERMISSIONS . $user->user_id), 'menu_id')) {
+        if (!$permission || !in_array($permission['menu_id'], Cache::get(XhyCacheKeys::USER_PERMISSIONS . $user->user_id))) {
             throw new PermissionForbiddenException();
         }
 
@@ -72,17 +74,9 @@ class PermissionsMiddleware
      */
     protected function parseRule($rule)
     {
-        [$controller, $action] = explode(Str::contains($rule, '@') ? '@' : '/', $rule);
+        @[$controller, $action] = @explode('/', $rule);
 
-        $controller = explode('\\', $controller);
-
-        $controllerName = strtolower(array_pop($controller));
-
-        array_pop($controller);
-
-        $module = array_pop($controller);
-
-        return [$module, $controllerName, $action];
+        return [$controller, $action];
     }
 
 
@@ -98,10 +92,10 @@ class PermissionsMiddleware
      * @throws \think\db\exception\ModelNotFoundException
      * @return array|bool|\think\Model|null
      */
-    protected function getPermission($module, $controllerName, $action)
+    protected function getPermission($controllerName, $action)
     {
         $permissionMark = sprintf('%s@%s', $controllerName, $action);
-        $menu = Menu::where('module', $module)->where('permission_mark', $permissionMark)->find();
+        $menu = Menu::where('permission_mark', $permissionMark)->find();
         if (!$menu) {
             $menu = \think\facade\Db::table('s_menu_function')->field('menu_function_id as menu_id')->where('permission_id', $permissionMark)->find();
         } else {
@@ -121,5 +115,5 @@ class PermissionsMiddleware
         return ['login'];
     }
 
-   
+
 }
