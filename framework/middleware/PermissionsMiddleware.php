@@ -26,7 +26,7 @@ class PermissionsMiddleware
     public function handle(Request $request, \Closure $next)
     {
 
-        $rule = $request->rule()->getRule();
+        $rule = $request->rule()->getName();
 
         if (!$rule) {
             return $next($request);
@@ -74,8 +74,9 @@ class PermissionsMiddleware
      */
     protected function parseRule($rule)
     {
-        @[$controller, $action] = @explode('/', $rule);
-
+        $controller_action = @explode('\\', $rule);
+        $last = $controller_action[count($controller_action) -1];
+        @[$controller, $action] = @explode('@', $last);
         return [$controller, $action];
     }
 
