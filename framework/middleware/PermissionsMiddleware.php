@@ -75,8 +75,15 @@ class PermissionsMiddleware
     protected function parseRule($rule)
     {
         $controller_action = @explode('\\', $rule);
+
         $last = $controller_action[count($controller_action) -1];
-        @[$controller, $action] = @explode('@', $last);
+
+        @[$controller, $action] = explode('@', $last);
+        if ([$controller, $action][1] == '') {
+            [$controller, $action] = explode('/', $last);
+        }
+
+
         return [$controller, $action];
     }
 
