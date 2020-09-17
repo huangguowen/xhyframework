@@ -16,7 +16,7 @@ $router->put('user/switch/status/<id>', '\xhyadminframework\controller\User@swit
 $router->resource('dashboard', '\xhyadminframework\controller\Dashboard');
 
 //菜单模块
-$router->resource('menu', '\xhyadminframework\controller\Menu');
+$router->resource('menu', '\xhyadminframework\controller\Menu@index');
 $router->post('menu/sort', '\xhyadminframework\controller\Menu@sort');
 $router->get('menu/function/', '\xhyadminframework\controller\Menu@functionList');
 $router->post('menu/functionAdd', '\xhyadminframework\controller\Menu@functionAdd');
@@ -26,14 +26,14 @@ $router->post('menu/sortExchange', '\xhyadminframework\controller\Menu@sortExcha
 $router->put('menu/switch/<id>', '\xhyadminframework\controller\Menu@switch');
 
 //角色模块
-$router->resource('role', '\xhyadminframework\controller\Role');
+$router->resource('role', '\xhyadminframework\controller\Role@index');
 $router->post('role/getAllMenuData', '\xhyadminframework\controller\Role@getAllMenuData');
 $router->post('role/getAssignedMenuData', '\xhyadminframework\controller\Role@getAssignedMenuData');
 $router->resource('role/saveAssignMenu', '\xhyadminframework\controller\Role@saveAssignMenu');
 $router->resource('role/swtichStatus', '\xhyadminframework\controller\Role@swtichStatus');
 
 //用户模块
-$router->resource('user', '\xhyadminframework\controller\User')->middleware($routeMiddleware);
+$router->resource('user', '\xhyadminframework\controller\User@index');
 $router->get('user/getRolesByUserId', '\xhyadminframework\controller\User@getRolesByUserId');
 $router->post('user/updatePassword/<id>', '\xhyadminframework\controller\User@updatePassword');
 
@@ -42,22 +42,22 @@ $router->post('basic/updateProfile', '\xhyadminframework\controller\User@updateP
 $router->get('basic/getProfile', '\xhyadminframework\controller\User@getProfile');
 
 //系统日志
-$router->resource('log', '\xhyadminframework\controller\Log');
+$router->resource('log', '\xhyadminframework\controller\Log@index');
 $router->get('log/category', '\xhyadminframework\controller\Log@getCategoryList');
 
 
 //单位模块
-$router->resource('unit', '\xhyadminframework\controller\Unit');
+$router->resource('unit', '\xhyadminframework\controller\Unit@index');
 
 //字典模块
-$router->resource('dict', '\xhyadminframework\controller\Dict');
+$router->resource('dict', '\xhyadminframework\controller\Dict@index');
 $router->post('dict/sort', '\xhyadminframework\controller\Dict@sort');
 $router->get('dict/list', '\xhyadminframework\controller\Dict@dictList');
 $router->put('dict/listSort', '\xhyadminframework\controller\Dict@listSort');
 $router->put('dict/switch/status/<id>', '\xhyadminframework\controller\Dict@switchStatus');
 
 //系统参数管理
-$router->resource('config', '\xhyadminframework\controller\Config');
+$router->resource('config', '\xhyadminframework\controller\Config@index');
 $router->post('config/save', '\xhyadminframework\controller\Config@save');
 $router->get('config/group', '\xhyadminframework\controller\Config@getGroup');
 $router->post('config/update', '\xhyadminframework\controller\Config@add');
