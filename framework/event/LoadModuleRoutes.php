@@ -22,24 +22,19 @@ class LoadModuleRoutes
 
         $routes = XhyAdmin::getRoutes();
         if (!empty(\think\facade\Env::get('appconfig.APPNAME'))) {
-            $routes = array_merge($routes, [app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/route.php']);
+            $routes = array_merge($routes, [
+                app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/route.php',
+                app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME2') . '/route.php'
+            ]);
         }
         $routeMiddleware = config('xhy.route_middleware');
         //config配置项
         $configMiddleware = [\xhyadminframework\middleware\Config::class];
-        if ($domain) {
-            $router->domain($domain, function () use ($router, $routes) {
-                foreach ([$routes[0], @$routes[2]] as $route) {
-                    include $route;
-                }
-            })->middleware(array_merge($routeMiddleware, $configMiddleware));
-        } else {
-            $router->group(function () use ($router, $routes) {
-                foreach ([$routes[0], @$routes[2]] as $route) {
-                    include $route;
-                }
-            })->middleware(array_merge($routeMiddleware, $configMiddleware));
-        }
+        $router->group(function () use ($router, $routes) {
+            foreach ([$routes[0], @$routes[2], @$routes[3]] as $route) {
+                include $route;
+            }
+        })->middleware(array_merge($routeMiddleware, $configMiddleware));
 
         //framework的未登录
         $router->group(function () use ($router, $routes) {
@@ -58,6 +53,13 @@ class LoadModuleRoutes
             $router->group(function () use ($router) {
                 include app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/vistorRoute.php';
             });
+        }
+        // 抽离代码
+        if (file_exists(app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME2') . '/noMiddlewareRoute.php')) {
+            //不需要登录的模块
+            $router->group(function () use ($router) {
+                include app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME2') . '/noMiddlewareRoute.php';
+            })->middleware($configMiddleware);
         }
     }
 }
