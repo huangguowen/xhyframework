@@ -34,7 +34,6 @@ class LoadModuleRoutes
             foreach ([$routes[0], @$routes[2]] as $route) {
                 include $route;
             }
-            !empty(\think\facade\Env::get('appconfig.APPNAME2')) ? include $routes[3] : '';
         })->middleware(array_merge($routeMiddleware, $configMiddleware));
 
         //framework的未登录
@@ -55,12 +54,19 @@ class LoadModuleRoutes
                 include app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME') . '/vistorRoute.php';
             });
         }
-        // 抽离代码
+        // 合并app 和 admin
         if (file_exists(app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME2') . '/noMiddlewareRoute.php')) {
             //不需要登录的模块
             $router->group(function () use ($router) {
                 include app()->getRootPath() . \think\facade\Env::get('appconfig.APPNAME2') . '/noMiddlewareRoute.php';
             })->middleware($configMiddleware);
         }
+        // 合并app 和 admin
+        if (!empty(\think\facade\Env::get('appconfig.APPNAME2'))) {
+            $router->group(function () use ($router, $routes) {
+                include $routes[3];
+            })->middleware(['xhyadminframework\middleware\AuthTokenMiddleware']);
+        }
+
     }
 }
