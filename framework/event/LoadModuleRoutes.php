@@ -31,9 +31,10 @@ class LoadModuleRoutes
         //config配置项
         $configMiddleware = [\xhyadminframework\middleware\Config::class];
         $router->group(function () use ($router, $routes) {
-            foreach ([$routes[0], @$routes[2], @$routes[3]] as $route) {
+            foreach ([$routes[0], @$routes[2]] as $route) {
                 include $route;
             }
+            !empty(\think\facade\Env::get('appconfig.APPNAME2')) ? include $routes[3] : '';
         })->middleware(array_merge($routeMiddleware, $configMiddleware));
 
         //framework的未登录
