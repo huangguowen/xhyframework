@@ -28,6 +28,6 @@ class websocketHandle extends Make
 
     protected function getNamespace(string $app): string
     {
-        return parent::getNamespace($app) . '/swoole/Websocket';
+        return parent::getNamespace($app) . '\\swoole\\Websocket';
     }
 }
