@@ -26,7 +26,7 @@ class SwooleConfig extends Make
 
     protected function getStub(): string
     {
-        return __DIR__ . '\make' . DIRECTORY_SEPARATOR . 'config_swoole.stub';
+        return __DIR__ . '/make' . DIRECTORY_SEPARATOR . 'config_swoole.stub';
     }
 
     protected function execute(Input $input, Output $output)

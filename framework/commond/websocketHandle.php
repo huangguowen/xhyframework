@@ -23,7 +23,7 @@ class websocketHandle extends Make
 
     protected function getStub(): string
     {
-        return __DIR__ . '\make' . DIRECTORY_SEPARATOR . 'WebSocketEvent.stub';
+        return __DIR__ . '/make' . DIRECTORY_SEPARATOR . 'WebSocketEvent.stub';
     }
 
     protected function getNamespace(string $app): string
