@@ -29,6 +29,6 @@ class Task extends Make
 
     protected function getNamespace(string $app): string
     {
-        return parent::getNamespace($app) . '\\swoole\\Task';
+        return parent::getNamespace($app) . '/swoole/Task';
     }
 }

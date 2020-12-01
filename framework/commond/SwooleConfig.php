@@ -43,6 +43,6 @@ class SwooleConfig extends Make
 
     protected function getClassName(string $name): string
     {
-        return app()->getRootPath() . 'config\\' . 'swoole.php';
+        return app()->getRootPath() . 'config/' . 'swoole.php';
     }
 }
