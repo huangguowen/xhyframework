@@ -31,7 +31,7 @@ abstract class XhyController
 
         try {
             if (@$request->header()['authorization']) {
-                $this->userID = $this->auth->user()->user_id;
+                $this->user = $this->auth->user()->user_id;
                 $this->userName = $this->auth->user()->user_name;
                 $this->account_id = $this->auth->user()->account_id;
             } else {
@@ -44,7 +44,7 @@ abstract class XhyController
         } catch (\Exception $exception) {
             $message = $exception->getMessage();
             $code = getTokenMessageToCode($message);
-            if ($code == 30001 and !in_array($request->pathinfo(), config('xhy.refresh_token'))) {
+            if ($code == 30001 and !in_array($request->pathinfo(), config('xhy.no_verification_token'))) {
                 $this->account_id = '';
                 throw new AuthException($message);
             }

@@ -80,7 +80,9 @@ class XhyAdminService extends Service
      */
     protected function registerMiddleWares(): void
     {
-//        $this->app->middleware->add(config('xhy.middleware'));
+        if (config('xhy.middleware')) {
+            $this->app->middleware->add(config('xhy.middleware'));
+        }
     }
 
     /**

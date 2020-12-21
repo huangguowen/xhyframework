@@ -24,7 +24,7 @@ class Task extends Make
 
     protected function getStub(): string
     {
-        return __DIR__ . '/make' . DIRECTORY_SEPARATOR . 'task.stub';
+        return __DIR__ . '\make' . DIRECTORY_SEPARATOR . 'task.stub';
     }
 
     protected function getNamespace(string $app): string
