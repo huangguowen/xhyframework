@@ -31,7 +31,7 @@ abstract class XhyController
 
         try {
             if (@$request->header()['authorization']) {
-                $this->user = $this->auth->user()->user_id;
+                $this->userID = $this->auth->user()->user_id;
                 $this->userName = $this->auth->user()->user_name;
                 $this->account_id = $this->auth->user()->account_id;
             } else {
