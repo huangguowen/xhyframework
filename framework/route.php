@@ -36,7 +36,7 @@ $router->get('role/<id>', '\xhyadminframework\controller\Role@read');
 $router->put('role/<id>', '\xhyadminframework\controller\Role@update');
 $router->delete('role/<id>', '\xhyadminframework\controller\Role@delete');
 $router->get('role/getAllMenuData', '\xhyadminframework\controller\Role@getAllMenuData');
-$router->get('role/getAssignedMenuData', '\xhyadminframework\controller\Role@getAssignedMenuData');
+$router->get('role/getAssignedMenuData/<id>', '\xhyadminframework\controller\Role@getAssignedMenuData');
 $router->post('role/saveAssignMenu', '\xhyadminframework\controller\Role@saveAssignMenu');
 $router->post('role/swtichStatus', '\xhyadminframework\controller\Role@swtichStatus');
 
