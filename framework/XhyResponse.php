@@ -17,7 +17,7 @@ class XhyResponse
    * @param int $code
    * @return Json
    */
-  public static function success($data = [], $msg = 'success', $code = Code::SUCCESS): Json
+  public static function success($data = [], $msg = '成功', $code = Code::SUCCESS): Json
   {
     return json([
       'code'    => $code,
@@ -26,7 +26,7 @@ class XhyResponse
     ]);
   }
 
-  public static function success2($data = [], $extnedData, $msg = 'success', $code = Code::SUCCESS): Json
+  public static function success2($data = [], $extnedData, $msg = '成功', $code = Code::SUCCESS): Json
   {
     return json(
       array_merge([
@@ -36,7 +36,7 @@ class XhyResponse
       ],$extnedData));
   }
 
-  public static function listData($data = [], $totalCount,$pageIndex,$pageSize, $msg = 'success'): Json
+  public static function listData($data = [], $totalCount,$pageIndex,$pageSize, $msg = '成功'): Json
   {
     return json(
       [
@@ -61,7 +61,7 @@ class XhyResponse
   {
     return json([
       'code'    => Code::SUCCESS,
-      'message' => 'success',
+      'message' => '成功',
       'count'   => $list->total(),
       'current' => $list->currentPage(),
       'limit'   => $list->listRows(),
