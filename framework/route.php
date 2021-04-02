@@ -24,7 +24,7 @@ $router->delete('menu/<id>', '\xhyadminframework\controller\Menu@delete');
 $router->post('menu/sort', '\xhyadminframework\controller\Menu@sort');
 $router->get('menu/function/', '\xhyadminframework\controller\Menu@functionList');
 $router->post('menu/functionAdd', '\xhyadminframework\controller\Menu@functionAdd');
-$router->resource('menu/functionDel', '\xhyadminframework\controller\Menu@functionDel');
+$router->post('menu/functionDel', '\xhyadminframework\controller\Menu@functionDel');
 $router->post('menu/functionUpdate/<id>', '\xhyadminframework\controller\Menu@functionUpdate');
 $router->post('menu/sortExchange', '\xhyadminframework\controller\Menu@sortExchange');
 $router->put('menu/switch/<id>', '\xhyadminframework\controller\Menu@switch');
@@ -35,10 +35,10 @@ $router->post('role', '\xhyadminframework\controller\Role@save');
 $router->get('role/<id>', '\xhyadminframework\controller\Role@read');
 $router->put('role/<id>', '\xhyadminframework\controller\Role@update');
 $router->delete('role/<id>', '\xhyadminframework\controller\Role@delete');
-$router->post('role/getAllMenuData', '\xhyadminframework\controller\Role@getAllMenuData');
-$router->post('role/getAssignedMenuData', '\xhyadminframework\controller\Role@getAssignedMenuData');
-$router->resource('role/saveAssignMenu', '\xhyadminframework\controller\Role@saveAssignMenu');
-$router->resource('role/swtichStatus', '\xhyadminframework\controller\Role@swtichStatus');
+$router->get('role/getAllMenuData', '\xhyadminframework\controller\Role@getAllMenuData');
+$router->get('role/getAssignedMenuData', '\xhyadminframework\controller\Role@getAssignedMenuData');
+$router->post('role/saveAssignMenu', '\xhyadminframework\controller\Role@saveAssignMenu');
+$router->post('role/swtichStatus', '\xhyadminframework\controller\Role@swtichStatus');
 
 //用户模块
 $router->get('user', '\xhyadminframework\controller\User@index')->middleware($routeMiddleware);
