@@ -66,7 +66,7 @@ class User extends XhyController
         $where = "";
         $where .= Utils::getString("and user_name like '%{0}%'", $user_name);
         $where .= Utils::getNumber("and is_enabled = {0}", $is_enabled);
-        $where .= Utils::getNumber("and login_name like '%{0}%'", $login_name);
+        $where .= Utils::getString("and login_name like '%{0}%'", $login_name);
 
         //@获取记录总数
         $getCountSql = "select count(*) as total from s_user where 1=1 $where";
@@ -418,10 +418,10 @@ class User extends XhyController
         try {
             Db::startTrans();
             //获取修改前的记录
-            $before = Db::table("s_user_in_role")->where("user_id", $id)->find();
+          /*  $before = Db::table("s_user_in_role")->where("user_id", $id)->find();
             if ($before["user_id"] == "") {
                 return $this->fail("用户不存在");
-            }
+            }*/
             //保存s_user信息
             $upDataUser = Db::name('s_user')
                 ->where('user_id', $id)
@@ -434,7 +434,7 @@ class User extends XhyController
             $this->logInfo($logTitle, '');
 
             Db::commit();
-            return XhyResponse::success();
+            return XhyResponse::success('','修改密码成功');
         } catch (\Exception $e) {
 
             //region 异常 (回滚事务/记录日志/返回错误)
