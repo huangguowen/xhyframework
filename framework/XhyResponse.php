@@ -17,7 +17,7 @@ class XhyResponse
    * @param int $code
    * @return Json
    */
-  public static function success($data = [], $msg = '成功', $code = Code::SUCCESS): Json
+  public static function success($data = [], $msg = '操作成功', $code = Code::SUCCESS): Json
   {
     return json([
       'code'    => $code,

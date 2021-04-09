@@ -104,7 +104,7 @@ abstract class XhyController
      * @param int $code
      * @return Json
      */
-    public function success($data = [], $msg = 'success', $code = Code::SUCCESS): Json
+    public function success($data = [], $msg = '操作成功', $code = Code::SUCCESS): Json
     {
         return json([
             'code' => $code,
