@@ -134,7 +134,7 @@ abstract class XhyController
     }
 
 
-    public static function listData($data = [], $totalCount, $pageIndex, $pageSize, $msg = 'success'): Json
+    public static function listData($data = [], $totalCount, $pageIndex, $pageSize, $msg = '操作成功'): Json
     {
         return json(
             [
