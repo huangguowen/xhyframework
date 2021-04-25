@@ -45,52 +45,30 @@ class User extends XhyController
         //分页参数
         $pageIndex = $request->param("page");           //当前页码
         $pageSize = $request->param("limit");           //每页大小
-        $orderbyField = $request->param("sortField");   //排序字段
-        $orderbyDir = $request->param("sortOrder");     //排序方向
-
         //@查询参数
-        $user_name = $request->param("user_name");
-        $login_name = $request->param("login_name");
-        $is_enabled = $request->param("is_enabled");
-
-        //@默认排序字段名称
-        $defaultOrderbyField = "created desc";
-
-        //排序条件
-        $orderby = Utils::getOrderby($orderbyField, $orderbyDir, $defaultOrderbyField);
-        #endregion
-
-        //region 获取查询条件(查询条件/获取记录总数)
-        //--------------------------------------------------------------------
-        //@拼接查询条件
-        $where = "";
-        $where .= Utils::getString("and user_name like '%{0}%'", $user_name);
-        $where .= Utils::getNumber("and is_enabled = {0}", $is_enabled);
-        $where .= Utils::getString("and login_name like '%{0}%'", $login_name);
-
-        //@获取记录总数
-        $getCountSql = "select count(*) as total from s_user where 1=1 $where";
-        $totalCount = Db::query($getCountSql)[0]["total"];
-
-        //endregion
-
-        //region 编写查询语句
-        //--------------------------------------------------------------------
-        $mainSql = "
-            select  
-                    user_id as id,
-                    user_name,
-                    login_name,
-                    is_enabled,
-                    created
-            from
-                    s_user 
-            where 1=1 
-            $where $orderby
-        ";
-
-        $mainSql = Utils::getPagingSql($mainSql, $pageIndex, $pageSize);
-        $data = Db::query($mainSql);
+        $param = $request->param();
+        $where=[];
+        if($this->auth->user()->organizeid){
+            $where[]= ['organizeid','=',$this->auth->user()->organizeid];
+        }
+        if(isset($param["user_name"])&&$param["user_name"]){
+            $where[] = ['user_name','like','%'.$param["user_name"].'%'];
+        };
+        if(isset($param["login_name"])&&$param["login_name"]){
+            $where[] = ['login_name','like','%'.$param["login_name"].'%'];
+        };
+        if(isset($param["is_enabled"])&&$param["is_enabled"]){
+            $where[] = ['is_enabled','=',$param["is_enabled"]];
+        };
+        $data = Db::table('s_user')
+            ->leftJoin('p_account','p_account.user_id=s_user.user_id')
+            ->where($where)
+            ->field('SQL_CALC_FOUND_ROWS s_user.*,s_user.user_id as id')
+            ->page($pageIndex, $pageSize)
+            ->order('create_time','desc')
+            ->select()
+            ->toArray();
+        $totalCount = Db::query('SELECT FOUND_ROWS() c')[0]['c'];
         return $this->listData($data, $totalCount, $pageIndex, $pageSize);
         //endregion
     }
@@ -139,6 +117,7 @@ class User extends XhyController
         }
         try {
             $isSuccess = true;
+            $param = $request->param();
 
             //查询是否有该账号了
             $user = Db::table("s_user")->where('login_name', $request->param()['login_name'])->find();
@@ -151,10 +130,10 @@ class User extends XhyController
             $c_time = Utils::now();;
             $userInsertData = [
                 'user_id' => $guid,
-                'user_name' => $request->param()['user_name'],
+                'user_name' => $param['login_name'],
                 'user_type' => 'admin',
-                'login_name' => $request->param()['login_name'],
-                'login_password' => password_hash($request->param()['password'], PASSWORD_DEFAULT),
+                'login_name' => $param['login_name'],
+                'login_password' => password_hash($param['password'], PASSWORD_DEFAULT),
                 'is_enabled' => 1,
                 'is_protected' => 0,
                 'created' => $c_time,
@@ -162,6 +141,16 @@ class User extends XhyController
             ];
 
             Db::table("s_user")->insert($userInsertData);
+            //todo yjj 添加账号至p_account
+            $accountData =[
+                'user_id'=>$guid,
+                'nick_name'=>$param['login_name'],
+                'category'=>2,
+                'organizeid'=>(isset($param['school_id'])&&$param['school_id'])?$param['school_id']:$this->auth->user()->organizeid,
+                'status'=>1,
+                'create_time'=>$c_time
+            ];
+            Db::table('p_account')->insert($accountData);
 
             //批量增加角色
             foreach ($request->param()['roles'] as $v) {
@@ -203,6 +192,8 @@ class User extends XhyController
     {
         $user = $auth->user();
         $user->roles = $this->user->getRole($id);
+        //获取当前用户的所属组织
+        $user->info = Db::table('p_account')->where('user_id',$id)->find();
         return XhyResponse::success($user);
     }
 
@@ -227,7 +218,9 @@ class User extends XhyController
         $request = $request->post();
         $isSuccess = false;
         $roles = $request['roles'];
+        $school_id = $request['school_id'];
         unset($request['roles']);
+        unset($request['school_id']);
         try {
             Db::startTrans();
             //保存s_user信息
@@ -259,6 +252,21 @@ class User extends XhyController
                 if ($insertRoles === false) {
                     Db::rollback();
                     return $this->fail("插入角色失败");
+                }
+            }
+            if(isset($school_id)){
+                //
+                $info = Db::table('p_account')->where('user_id',$id)->find();
+                if($info){
+                    Db::table('p_account')->where('user_id',$id)->update(['organizeid'=>$school_id]);
+                }else{
+                    Db::table('p_account')->insert([
+                        'user_id'=>$id,
+                        'status'=>1,
+                        'organizeid'=>$school_id,
+                        'create_time'=>Utils::now(),
+                        'category'=>2
+                    ]);
                 }
             }
             $logTitle = "修改用户id{$id}信息";
