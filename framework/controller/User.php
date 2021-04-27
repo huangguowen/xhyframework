@@ -82,7 +82,12 @@ class User extends XhyController
      */
     public function getRolesByUserId()
     {
-        $role_ids = Db::table('s_role')->where('is_enabled', 1)->select()->toArray();
+        $where =[];
+        if($this->auth->user()->organizeid){
+            //如果有机构  则可选择角色排除超级管理员
+            $where[]= ['role_identity','<>','admin'];
+        }
+        $role_ids = Db::table('s_role')->where('is_enabled', 1)->where($where)->select()->toArray();
         return $this->success($role_ids);
     }
 
