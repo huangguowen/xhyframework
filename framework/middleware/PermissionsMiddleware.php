@@ -58,7 +58,15 @@ class PermissionsMiddleware
         if ($request->isGet() && config('xhy.permissions.is_allow_get')) {
             return $next($request);
         }
-        if (!$permission || !in_array($permission['menu_id'], Cache::get(XhyCacheKeys::USER_PERMISSIONS . $user->user_id))) {
+        if(Cache::get(XhyCacheKeys::USER_PERMISSIONS . $user->user_id)){
+            $checkPermission =  Cache::get(XhyCacheKeys::USER_PERMISSIONS . $user->user_id);
+        }else{
+            $checkPermission = $permission;
+        }
+        if (!$permission) {
+            throw new PermissionForbiddenException();
+        }
+        if (!in_array($permission['menu_id'], $checkPermission)) {
             throw new PermissionForbiddenException();
         }
 
