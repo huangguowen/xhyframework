@@ -101,7 +101,7 @@ class role extends XhyController
     }
 
 
-    
+
     /**
      * 获取角色记录
      * @time 2020年01月09日
@@ -200,6 +200,11 @@ class role extends XhyController
         try {
 
             if ($action == "addnew") {
+                //判断角色是否存在
+                $exist = Db::table("s_role")->where('role_name',$role_name)->find();
+                if($exist){
+                    return $this->fail('角色名称已存在');
+                }
                 $guid = Utils::guid();
                 //region 添加操作
                 $msg = "添加成功";
@@ -227,7 +232,10 @@ class role extends XhyController
                 if ($before["role_id"] == "") {
                     return $this->fail("记录不存在，请刷新重试");
                 }
-
+                $exist = Db::table("s_role")->where('role_name',$entity['role_name'])->where("role_id", '<>',$id)->find();
+                if($exist){
+                    return $this->fail('角色名称已存在');
+                }
                 $msg = "修改成功";
                 $logTitle = "修改角色{$before["role_name"]}信息";
                 $entity["modified"] = Utils::now();
@@ -342,7 +350,7 @@ class role extends XhyController
     }
 
 
-    
+
     /**
      * 获取所有的菜单和功能权限数据
      */
@@ -357,7 +365,7 @@ class role extends XhyController
     }
 
 
-    
+
     /**
      * 获取该角色已分配的菜单数据
      * @time 2020年01月09日
@@ -381,7 +389,7 @@ class role extends XhyController
 
 
 
-    
+
     /**
      *
      * @time 2019年12月11日
