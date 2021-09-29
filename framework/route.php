@@ -38,7 +38,7 @@ $router->delete('role/<id>', '\xhyadminframework\controller\Role@delete');
 $router->get('getAllMenuData', '\xhyadminframework\controller\Role@getAllMenuData');
 $router->get('role/getAssignedMenuData/<id>', '\xhyadminframework\controller\Role@getAssignedMenuData');
 $router->post('role/saveAssignMenu', '\xhyadminframework\controller\Role@saveAssignMenu');
-$router->post('role/swtichStatus', '\xhyadminframework\controller\Role@swtichStatus');
+$router->post('role/swtichStatus/<id>', '\xhyadminframework\controller\Role@swtichStatus');
 
 //用户模块
 $router->get('user', '\xhyadminframework\controller\User@index')->middleware($routeMiddleware);
